@@ -1,0 +1,83 @@
+
+pack.png
+size: 994,198
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Attack
+  rotate: false
+  xy: 2, 42
+  size: 153, 156
+  orig: 153, 156
+  offset: 0, 0
+  index: -1
+Attack2
+  rotate: false
+  xy: 157, 42
+  size: 153, 156
+  orig: 153, 156
+  offset: 0, 0
+  index: -1
+Defend
+  rotate: false
+  xy: 812, 102
+  size: 90, 96
+  orig: 90, 96
+  offset: 0, 0
+  index: -1
+Defend2
+  rotate: false
+  xy: 904, 102
+  size: 90, 96
+  orig: 90, 96
+  offset: 0, 0
+  index: -1
+IconSlot
+  rotate: false
+  xy: 619, 100
+  size: 96, 98
+  orig: 96, 98
+  offset: 0, 0
+  index: -1
+IconSlotCircle
+  rotate: false
+  xy: 312, 42
+  size: 153, 156
+  orig: 153, 156
+  offset: 0, 0
+  index: -1
+IconSlotCircle2
+  rotate: false
+  xy: 467, 48
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+IconSlotSmallCircle
+  rotate: false
+  xy: 619, 2
+  size: 90, 96
+  orig: 90, 96
+  offset: 0, 0
+  index: -1
+IconSlotSmallCircle2
+  rotate: false
+  xy: 711, 2
+  size: 90, 96
+  orig: 90, 96
+  offset: 0, 0
+  index: -1
+Skill
+  rotate: false
+  xy: 803, 4
+  size: 90, 96
+  orig: 90, 96
+  offset: 0, 0
+  index: -1
+Skill2
+  rotate: false
+  xy: 717, 102
+  size: 93, 96
+  orig: 93, 96
+  offset: 0, 0
+  index: -1

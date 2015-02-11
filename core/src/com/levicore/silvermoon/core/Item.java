@@ -12,7 +12,7 @@ public class Item {
 
     private int cost;
 
-    public Item(String description, Entity icon) {
+    public Item(Entity icon, String description) {
         this.description = description;
         this.icon = icon;
 

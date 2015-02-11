@@ -1,0 +1,47 @@
+
+System.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Skill_Info_Background
+  rotate: false
+  xy: 1, 130
+  size: 819, 507
+  orig: 819, 507
+  offset: 0, 0
+  index: -1
+TPBar
+  rotate: false
+  xy: 1, 87
+  size: 531, 41
+  orig: 531, 41
+  offset: 0, 0
+  index: -1
+MPBar
+  rotate: false
+  xy: 1, 43
+  size: 329, 42
+  orig: 329, 42
+  offset: 0, 0
+  index: -1
+HPBar
+  rotate: false
+  xy: 1, 1
+  size: 327, 40
+  orig: 327, 40
+  offset: 0, 0
+  index: -1
+Selector
+  rotate: false
+  xy: 822, 514
+  size: 86, 123
+  orig: 86, 123
+  offset: 0, 0
+  index: 1
+Selector
+  rotate: false
+  xy: 534, 94
+  size: 128, 34
+  orig: 128, 34
+  offset: 0, 0
+  index: 2

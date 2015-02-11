@@ -6,7 +6,6 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.levicore.silvermoon.core.Bonus;
 import com.levicore.silvermoon.utils.debug.DebugState;
 import test.StateTest;
 

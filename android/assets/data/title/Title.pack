@@ -1,0 +1,296 @@
+
+Title.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Title-BG
+  rotate: false
+  xy: 1, 536
+  size: 640, 480
+  orig: 640, 480
+  offset: 0, 0
+  index: -1
+Title-BGLayer
+  rotate: false
+  xy: 1, 54
+  size: 640, 480
+  orig: 640, 480
+  offset: 0, 0
+  index: -1
+Title-New01
+  rotate: false
+  xy: 1, 1
+  size: 640, 51
+  orig: 640, 51
+  offset: 0, 0
+  index: -1
+Title-Logo
+  rotate: false
+  xy: 643, 712
+  size: 320, 304
+  orig: 320, 304
+  offset: 0, 0
+  index: -1
+Title-ArrowL
+  rotate: false
+  xy: 643, 661
+  size: 50, 49
+  orig: 50, 49
+  offset: 0, 0
+  index: -1
+Title-ArrowR
+  rotate: false
+  xy: 965, 967
+  size: 50, 49
+  orig: 50, 49
+  offset: 0, 0
+  index: -1
+
+Title2.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Title-Sparkle01
+  rotate: false
+  xy: 1, 536
+  size: 640, 480
+  orig: 640, 480
+  offset: 0, 0
+  index: -1
+Title-Sparkle02
+  rotate: false
+  xy: 1, 54
+  size: 640, 480
+  orig: 640, 480
+  offset: 0, 0
+  index: -1
+Title-New02
+  rotate: false
+  xy: 1, 1
+  size: 640, 51
+  orig: 640, 51
+  offset: 0, 0
+  index: -1
+
+Title3.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Title-Sparkle03
+  rotate: false
+  xy: 1, 536
+  size: 640, 480
+  orig: 640, 480
+  offset: 0, 0
+  index: -1
+Title_CommandBG01
+  rotate: false
+  xy: 1, 54
+  size: 640, 480
+  orig: 640, 480
+  offset: 0, 0
+  index: -1
+Title-New03
+  rotate: false
+  xy: 1, 1
+  size: 640, 51
+  orig: 640, 51
+  offset: 0, 0
+  index: -1
+
+Title4.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Title_CommandBG02
+  rotate: false
+  xy: 1, 529
+  size: 640, 480
+  orig: 640, 480
+  offset: 0, 0
+  index: -1
+Title-OptionsGlow
+  rotate: false
+  xy: 1, 428
+  size: 640, 99
+  orig: 640, 99
+  offset: 0, 0
+  index: -1
+Title-ContinueGlow
+  rotate: false
+  xy: 1, 328
+  size: 640, 98
+  orig: 640, 98
+  offset: 0, 0
+  index: -1
+Title-ExitGlow
+  rotate: false
+  xy: 1, 228
+  size: 640, 98
+  orig: 640, 98
+  offset: 0, 0
+  index: -1
+Title-NewGlow
+  rotate: false
+  xy: 1, 138
+  size: 640, 88
+  orig: 640, 88
+  offset: 0, 0
+  index: -1
+Title_CommandBGBorder
+  rotate: false
+  xy: 1, 54
+  size: 640, 82
+  orig: 640, 82
+  offset: 0, 0
+  index: -1
+Title-New04
+  rotate: false
+  xy: 1, 1
+  size: 640, 51
+  orig: 640, 51
+  offset: 0, 0
+  index: -1
+
+Title5.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Title-Continue01
+  rotate: false
+  xy: 1, 955
+  size: 640, 50
+  orig: 640, 50
+  offset: 0, 0
+  index: -1
+Title-Continue02
+  rotate: false
+  xy: 1, 903
+  size: 640, 50
+  orig: 640, 50
+  offset: 0, 0
+  index: -1
+Title-Continue03
+  rotate: false
+  xy: 1, 851
+  size: 640, 50
+  orig: 640, 50
+  offset: 0, 0
+  index: -1
+Title-Continue04
+  rotate: false
+  xy: 1, 799
+  size: 640, 50
+  orig: 640, 50
+  offset: 0, 0
+  index: -1
+Title-Continue05
+  rotate: false
+  xy: 1, 747
+  size: 640, 50
+  orig: 640, 50
+  offset: 0, 0
+  index: -1
+Title-Exit01
+  rotate: false
+  xy: 1, 695
+  size: 640, 50
+  orig: 640, 50
+  offset: 0, 0
+  index: -1
+Title-Exit02
+  rotate: false
+  xy: 1, 643
+  size: 640, 50
+  orig: 640, 50
+  offset: 0, 0
+  index: -1
+Title-Exit03
+  rotate: false
+  xy: 1, 591
+  size: 640, 50
+  orig: 640, 50
+  offset: 0, 0
+  index: -1
+Title-Exit04
+  rotate: false
+  xy: 1, 539
+  size: 640, 50
+  orig: 640, 50
+  offset: 0, 0
+  index: -1
+Title-Exit05
+  rotate: false
+  xy: 1, 487
+  size: 640, 50
+  orig: 640, 50
+  offset: 0, 0
+  index: -1
+Title-New05
+  rotate: false
+  xy: 1, 434
+  size: 640, 51
+  orig: 640, 51
+  offset: 0, 0
+  index: -1
+Title-Options01
+  rotate: false
+  xy: 1, 381
+  size: 640, 51
+  orig: 640, 51
+  offset: 0, 0
+  index: -1
+Title-Options02
+  rotate: false
+  xy: 1, 328
+  size: 640, 51
+  orig: 640, 51
+  offset: 0, 0
+  index: -1
+Title-Options03
+  rotate: false
+  xy: 1, 275
+  size: 640, 51
+  orig: 640, 51
+  offset: 0, 0
+  index: -1
+Title-Options04
+  rotate: false
+  xy: 1, 222
+  size: 640, 51
+  orig: 640, 51
+  offset: 0, 0
+  index: -1
+Title-Options05
+  rotate: false
+  xy: 1, 169
+  size: 640, 51
+  orig: 640, 51
+  offset: 0, 0
+  index: -1
+Title_CommandBG03
+  rotate: false
+  xy: 1, 85
+  size: 631, 82
+  orig: 631, 82
+  offset: 0, 0
+  index: -1
+Title_CommandBGBorder02
+  rotate: false
+  xy: 1, 1
+  size: 640, 82
+  orig: 640, 82
+  offset: 0, 0
+  index: -1
+
+Title6.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Title_CommandBGBorder03
+  rotate: false
+  xy: 1, 1
+  size: 640, 82
+  orig: 640, 82
+  offset: 0, 0
+  index: -1

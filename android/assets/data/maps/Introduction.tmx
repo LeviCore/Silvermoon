@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" nextobjectid="14">
+ <tileset firstgid="1" name="Floor" tilewidth="32" tileheight="32">
+  <image source="tilesets/Floor.png" width="256" height="512"/>
+ </tileset>
+ <tileset firstgid="129" name="Collission_1" tilewidth="32" tileheight="32">
+  <image source="tilesets/Collission_1.png" width="256" height="989"/>
+  <terraintypes>
+   <terrain name="New Teqweqwerrain" tile="20"/>
+  </terraintypes>
+ </tileset>
+ <tileset firstgid="369" name="Collission_2" tilewidth="32" tileheight="32">
+  <image source="tilesets/Collission_2.png" width="512" height="256"/>
+ </tileset>
+ <tileset firstgid="497" name="Collission_3" tilewidth="32" tileheight="32">
+  <image source="tilesets/Collission_3.png" width="512" height="512"/>
+ </tileset>
+ <layer name="Ground" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt1rEJAAAMAkGzdqbPGgauuF74xk2yAABUmYINaAIAwH9+bA8tAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADglwN0q5zL
+  </data>
+ </layer>
+ <layer name="Ground_2" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt0bENgDAMRUEvwgRMwQLs33kVlI4mihBRnOKu+oWLJzkCAAAA2Em+9llWQfPnF9fMED7L8QmL3dUBAEDXUR0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABt6APCLA6A=
+  </data>
+ </layer>
+ <layer name="Collision" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt1rsKg0AQBdDB//+RGExv7M0/+QAnlZ0gkkzhOXCbZYsLswMbAQDAPz2aiDbzbKqb8NXnHN6ZwTxKzZnlxDm/N2Y+1SVubIr9/a8H9+wIUK3LvKpLAFzkTwXn2RsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA7mADtzoU4g==
+  </data>
+ </layer>
+ <layer name="Foreground" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt18kGA0EYhdG8/xtmJCMZybgIIXcZkS4hSjc5h4/y72txez0A+F0/DdIwjdI4TQp36pqmWZqnRVqmVeFOXeu0Sdu0S/t0KNyp65hO6Zwu6ZpuhTv13V/ejy/uAPDO7ugWu6NbmnaHf9OOpt3h37Tn0+6w17vFXu8eex0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAf/EESfFerQ==
+  </data>
+ </layer>
+ <layer name="Foreground_2" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJztzkkKwlAURNGQ/W9AXZkt2IIt2IKCYg0dZBQigjkHLnweNfhFAQD8u05ZFN3UK3/9k3bpp0EaplEap0mNDc2Yplmap0VaplWNDc1Yp03apl3ap0ONDc04plM6p0u6pluNDc24V9xeFbfHx/v5pb8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQFu9Aen1MSs=
+  </data>
+ </layer>
+ <imagelayer name="Image" x="866" y="1234"/>
+</map>

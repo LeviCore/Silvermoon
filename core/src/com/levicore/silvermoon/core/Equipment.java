@@ -1,11 +1,7 @@
 package com.levicore.silvermoon.core;
 
-import com.levicore.silvermoon.*;
-import com.levicore.silvermoon.Character;
 import com.levicore.silvermoon.entities.Entity;
 import com.levicore.silvermoon.entities.battle.BattleEntity;
-import com.levicore.silvermoon.utils.menu.OptionCallback;
-import com.sun.istack.internal.NotNull;
 
 /**
  * Created by user on 2/12/2015.

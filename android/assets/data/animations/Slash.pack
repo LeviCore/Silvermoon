@@ -1,0 +1,40 @@
+
+Slash.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Sword
+  rotate: false
+  xy: 1, 61
+  size: 185, 186
+  orig: 185, 186
+  offset: 0, 0
+  index: 2
+Sword
+  rotate: false
+  xy: 188, 90
+  size: 158, 157
+  orig: 158, 157
+  offset: 0, 0
+  index: 3
+Sword
+  rotate: false
+  xy: 348, 154
+  size: 100, 93
+  orig: 100, 93
+  offset: 0, 0
+  index: 4
+Sword
+  rotate: false
+  xy: 348, 80
+  size: 79, 72
+  orig: 79, 72
+  offset: 0, 0
+  index: 5
+Sword
+  rotate: false
+  xy: 1, 1
+  size: 64, 58
+  orig: 64, 58
+  offset: 0, 0
+  index: 6
