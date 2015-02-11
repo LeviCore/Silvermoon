@@ -6,8 +6,8 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.levicore.silvermoon.states.Title;
 import com.levicore.silvermoon.utils.debug.DebugState;
-import test.StateTest;
 
 public class Silvermoon extends ApplicationAdapter {
 
@@ -48,7 +48,7 @@ public class Silvermoon extends ApplicationAdapter {
 			if(selfSwitch) {
 				Assets.initResources();
 
-				gsm.push(new StateTest(gsm));
+				gsm.push(new Title(gsm));
                 gsm.push(new DebugState(gsm));
 
 				selfSwitch = false;
