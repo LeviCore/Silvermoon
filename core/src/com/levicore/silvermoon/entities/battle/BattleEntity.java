@@ -12,6 +12,7 @@ import com.levicore.silvermoon.battle.Buff;
 import com.levicore.silvermoon.battle.Skill;
 import com.levicore.silvermoon.battle.skills.Attack;
 import com.levicore.silvermoon.battle.skills.Defend;
+import com.levicore.silvermoon.core.Item;
 import com.levicore.silvermoon.entities.Entity;
 import com.levicore.silvermoon.entities.ui.PercentageBar;
 import com.levicore.silvermoon.utils.tween.EntityAccessor;
@@ -68,6 +69,7 @@ public class BattleEntity extends Entity {
     public Entity weapon;
 
     public List<Behavior> behaviors = new ArrayList<>();
+    public List<Item> itemDrops = new ArrayList<>();
 
     private BitmapFont bitmapFont;
 

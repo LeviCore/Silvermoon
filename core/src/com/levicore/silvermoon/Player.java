@@ -1,7 +1,11 @@
 package com.levicore.silvermoon;
 
+import com.levicore.silvermoon.entities.Entity;
+import com.levicore.silvermoon.entities.MapEntity;
+import com.levicore.silvermoon.entities.battle.KadukiBattler;
 import com.levicore.silvermoon.inventory.ItemPage;
 import com.levicore.silvermoon.inventory.ItemStorage;
+import com.levicore.silvermoon.presets.monsters.Monsters_A;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +16,6 @@ import java.util.List;
 public class Player {
 
     // TODO Inventory
-
     private Silvermoon game;
 
     /** List of all current party members **/
@@ -24,10 +27,48 @@ public class Player {
     public Player(Silvermoon game) {
         this.game = game;
         itemStorage.addItemPage(new ItemPage(9));
+
+        // Test =========================================================
+        KadukiBattler s = new KadukiBattler("$Actor63", 23, 23, 32, 32);
+        KadukiBattler k = new KadukiBattler("$Actor31", 23, 23, 32, 32);
+        // ==============================================================
+
+
+        MapEntity vince = new MapEntity(s.IDLE, 100);
+        vince.setPosition(0, 0);
+        vince.initKadukiDefaultAnimations("$Actor63", 32, 32);
+
+        party.add(
+                new Character(vince, Monsters_A.createDummy(), new Entity(Assets.FACES_ATLAS.findRegion("$Actor63_Normal")), "Levi")
+
+        );
+
+        party.add(
+                new Character(vince, Monsters_A.createDummy(), new Entity(Assets.FACES_ATLAS.findRegion("$Actor63_Normal")), "Levi")
+
+        );
+
+        party.add(
+                new Character(vince, Monsters_A.createDummy(), new Entity(Assets.FACES_ATLAS.findRegion("$Actor63_Normal")), "Levi")
+
+        );
+
+        party.add(
+                new Character(vince, Monsters_A.createDummy(), new Entity(Assets.FACES_ATLAS.findRegion("$Actor63_Normal")), "Levi")
+
+        );
+
+        for(Character character : party) {
+            character.getBattleEntity().setX(-400);
+        }
     }
 
     public void engageBattle() {
 
+    }
+
+    public List<Character> getParty() {
+        return party;
     }
 
     public static Player createPlayer(Silvermoon game) {

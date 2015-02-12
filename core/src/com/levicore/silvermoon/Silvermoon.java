@@ -28,6 +28,8 @@ public class Silvermoon extends ApplicationAdapter {
 
     private boolean debug = true;
 
+    public Player player;
+
 	@Override
 	public void create () {
 		Gdx.gl.glClearColor(0.2f, 0.2f, 0.2f, 1);
@@ -51,8 +53,10 @@ public class Silvermoon extends ApplicationAdapter {
 			if(selfSwitch) {
 				Assets.initResources();
 
-//				gsm.push(new Title(gsm));
-                gsm.push(new StateTest(gsm));
+                player = new Player(this);
+
+				gsm.push(new Title(gsm));
+//                gsm.push(new StateTest(gsm));
 //                gsm.push(new DebugState(gsm));
 
 				selfSwitch = false;

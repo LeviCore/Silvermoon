@@ -8,13 +8,13 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.levicore.silvermoon.*;
+import com.levicore.silvermoon.Character;
 import com.levicore.silvermoon.battle.Behavior;
 import com.levicore.silvermoon.battle.Buff;
 import com.levicore.silvermoon.battle.Skill;
-import com.levicore.silvermoon.battle.behaviors.Normal;
+import com.levicore.silvermoon.core.Item;
 import com.levicore.silvermoon.entities.Entity;
 import com.levicore.silvermoon.entities.battle.BattleEntity;
-import com.levicore.silvermoon.entities.battle.KadukiBattler;
 import com.levicore.silvermoon.entities.ui.*;
 import com.levicore.silvermoon.utils.comparators.StatComparator;
 import com.levicore.silvermoon.utils.map.MapState;
@@ -70,10 +70,22 @@ public class BattleState extends State {
     private float finalValue;
     private boolean isSkillMenuOpen = false;
 
-    public BattleState(GSM gsm, MapState mapState, Music music, PHASE phase) {
+    protected VictoryWindow victoryWindow;
+
+    protected List<Character> characters;
+    protected List<BattleEntity> enemies;
+    protected List<Item> itemDrops;
+    private boolean done;
+
+    public BattleState(GSM gsm, MapState mapState, Music music, PHASE phase, List<Character> characters, List<BattleEntity> enemies) {
         super(gsm);
         this.mapState = mapState;
         this.phase = phase;
+
+        this.characters = characters;
+        this.enemies = enemies;
+
+        initBattlers();
 
         // TODO : move in a Timline method if necessary to be overridden for custom cutscenes.
         Timeline.createSequence()
@@ -83,61 +95,30 @@ public class BattleState extends State {
         execute();
     }
 
-    public void initTest() {
+    public void initBattlers() {
+        // Set item drops
+        itemDrops = new ArrayList<>();
+        for(BattleEntity enemy : enemies) {
+            itemDrops.addAll(enemy.itemDrops);
+        }
 
-        KadukiBattler vince2 = new KadukiBattler("$Actor63", -240, -50, 32, 32);
-        vince2.name = "Vincent";
+        // Init victory window
+        victoryWindow = new VictoryWindow(this, characters, itemDrops);
 
-        vince2.maxHP = 1000;
-        vince2.curHP = 1000;
+        // Set first 4 as active battlers, TODO position them.
+        for (int i = 0; i < 4; i++) {
+            Character character = characters.get(i);
+            if(character != null) {
+                partyA.add(character.getBattleEntity());
+            }
+        }
 
-        vince2.maxMP = 100;
-        vince2.curMP = 100;
+        partyB.addAll(enemies);
 
-        vince2.maxTP = 100;
-        vince2.curTP = 100;
+        battlers.addAll(partyA);
+        battlers.addAll(partyB);
 
-        vince2.flipBattler(true, false).start(tweenManager);
-        vince2.speed = 99;
-
-        partyA.add(vince2);
-
-        KadukiBattler rhea = new KadukiBattler("$Actor33", 240 - 32, 0, 32, 32);
-        rhea.name = "Rheajoy The Beautiful";
-
-        rhea.behaviors.add(new Normal(this, rhea));
-
-        rhea.maxHP = 10;
-        rhea.curHP = 10;
-
-        rhea.maxMP = 100;
-        rhea.curMP = 100;
-
-        rhea.maxTP = 100;
-        rhea.curTP = 100;
-
-        rhea.speed = 1;
-
-        partyB.add(rhea);
-
-        KadukiBattler rhea2 = new KadukiBattler("$Actor132a", 240 - 32, -50, 32, 32);
-        rhea2.name = "Rheajoy The Pretty";
-
-        rhea2.behaviors.add(new Normal(this, rhea2));
-
-        rhea2.maxHP = 10;
-        rhea2.curHP = 10;
-
-        rhea2.maxMP = 100;
-        rhea2.curMP = 100;
-
-        rhea2.maxTP = 100;
-        rhea2.curTP = 100;
-
-        rhea2.speed = 20;
-
-        partyB.add(rhea2);
-
+        Collections.sort(battlers, new StatComparator(StatComparator.Attribute.SPEED));
     }
 
     @Override
@@ -186,10 +167,12 @@ public class BattleState extends State {
         }
 
 
-        drawBattlerNames(batch);
+//        drawBattlerNames(batch);
         drawAndUpdateTemporaryEntities(delta, batch);
 
         db.draw(batch);
+
+        victoryWindow.updateAndRender(delta, batch);
 
         batch.end();
     }
@@ -215,8 +198,6 @@ public class BattleState extends State {
         selector_1 = new Entity(Assets.SYSTEM_ATLAS.findRegion("Selector", 1));
         selector_2 = new Entity(Assets.SYSTEM_ATLAS.findRegion("Selector", 2));
 
-        initTest();
-
         background.setSize(Silvermoon.SCREEN_WIDTH * 1.3f, Silvermoon.SCREEN_HEIGHT * 1.3f);
         background.setPosition(-Silvermoon.SCREEN_WIDTH * 1.3f / 2, -Silvermoon.SCREEN_HEIGHT * 1.3f / 2);
         entities.add(background);
@@ -225,11 +206,6 @@ public class BattleState extends State {
         selector_2.setSize(32 * 2, selector_2.getHeight());
 
         gsm.getBitmapFont().setScale(0.75f, 0.75f);
-
-        battlers.addAll(partyA);
-        battlers.addAll(partyB);
-
-        Collections.sort(battlers, new StatComparator(StatComparator.Attribute.SPEED));
 
         super.initialize();
     }
@@ -384,7 +360,12 @@ public class BattleState extends State {
 
             }
         } else {
-            executeWin();
+            victoryWindow.next().start(getTweenManager());
+
+            if(done) {
+                executeWin();
+                done = false;
+            }
         }
     }
 
@@ -867,6 +848,27 @@ public class BattleState extends State {
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+
+        if(getWinner() != null) {
+            switch (victoryWindow.getPhase()) {
+                case CHARACTER_INFO:
+                    victoryWindow.next().start(tweenManager);
+                    break;
+                case ITEMS_INFO:
+                    Timeline.createSequence()
+                            .push(victoryWindow.next())
+                            .setCallback(new TweenCallback() {
+                                @Override
+                                public void onEvent(int type, BaseTween<?> source) {
+                                    done = true;
+                                    execute();
+                                }
+                            })
+                            .start(tweenManager);
+                    break;
+            }
+        }
+
         switch (phase) {
             case ACTION_SELECTION:
                 handleActionSelectionTouchUp();

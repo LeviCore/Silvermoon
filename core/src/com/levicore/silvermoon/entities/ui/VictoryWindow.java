@@ -4,14 +4,14 @@ import aurelienribon.tweenengine.BaseTween;
 import aurelienribon.tweenengine.Timeline;
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenCallback;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.levicore.silvermoon.*;
+import com.levicore.silvermoon.Assets;
 import com.levicore.silvermoon.Character;
+import com.levicore.silvermoon.Silvermoon;
+import com.levicore.silvermoon.State;
 import com.levicore.silvermoon.core.Item;
 import com.levicore.silvermoon.entities.Entity;
 import com.levicore.silvermoon.entities.TextEntity;
-import com.levicore.silvermoon.states.BattleState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +49,7 @@ public class VictoryWindow {
 
     public VictoryWindow(State battleState, List<Character> characters, List<Item> items) {
         this.battleState = battleState;
-        phase = PHASE.CHARACTER_INFO;
+        phase = PHASE.UNSTARTED;
 
         width = Silvermoon.SCREEN_WIDTH - 50;
         height = Silvermoon.SCREEN_HEIGHT / 3;
@@ -60,6 +60,7 @@ public class VictoryWindow {
         background = new Entity(Assets.SYSTEM_ATLAS.findRegion("Skill_Info_Background"));
         background.setSize(width, height);
         background.setPosition(x, y);
+        background.setAlpha(0);
 
         float curX = x + insetX;
         float curY = y + insetY;
@@ -78,8 +79,11 @@ public class VictoryWindow {
             curX += intervalX + character.getCharacterFace().getWidth();
         }
 
-        itemsGained = new ArrayList<>();
+        for(CharacterInfo characterInfo : characterInfoList) {
+            characterInfo.setAlpha(0);
+        }
 
+        itemsGained = new ArrayList<>();
         for(Item item : items) {
             itemsGained.add(new SimpleItemInfo(item, null));
         }
@@ -135,10 +139,20 @@ public class VictoryWindow {
 
 
     // TODO : Execute phase switching here.
-    public void next() {
+    public Timeline next() {
         switch (phase) {
+            case UNSTARTED :
+                return Timeline.createSequence()
+                        .push(fadeInVictoryWindow(0.25f))
+                        .push(Tween.call(new TweenCallback() {
+                            @Override
+                            public void onEvent(int type, BaseTween<?> source) {
+                                phase = PHASE.CHARACTER_INFO;
+                            }
+                        }))
+                        .start(battleState.getTweenManager());
             case CHARACTER_INFO:
-                Timeline.createSequence()
+                return Timeline.createSequence()
                         .push(fadeOutCharacterInfos(0.25f))
                         .push(fadeInItemsGained(0.25f))
                         .push(Tween.call(new TweenCallback() {
@@ -148,12 +162,12 @@ public class VictoryWindow {
                             }
                         }))
                         .start(battleState.getTweenManager());
-                break;
             case ITEMS_INFO:
                 // TODO : CALL RETURN TO MAPSTATE
-                fadeOutVictoryWindow(0.25f).start(battleState.getTweenManager());
-                break;
+                return fadeOutVictoryWindow(0.25f).start(battleState.getTweenManager());
         }
+
+        return null;
     }
 
     /**
@@ -199,6 +213,16 @@ public class VictoryWindow {
         return timeline;
     }
 
+    private Timeline fadeInVictoryWindow(float duration) {
+        Timeline timeline = Timeline.createParallel();
+
+        timeline.push(background.fadeIn(duration))
+                .push(fadeInCharacterInfos(duration));
+
+
+        return timeline;
+    }
+
     private Timeline fadeOutVictoryWindow(float duration) {
         Timeline timeline = Timeline.createParallel();
 
@@ -209,8 +233,12 @@ public class VictoryWindow {
         return timeline;
     }
 
-    private enum PHASE {
-        CHARACTER_INFO, ITEMS_INFO
+    public PHASE getPhase() {
+        return phase;
+    }
+
+    public enum PHASE {
+        UNSTARTED, CHARACTER_INFO, ITEMS_INFO
     }
 
 }

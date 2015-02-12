@@ -7,6 +7,7 @@ import com.levicore.silvermoon.Assets;
 import com.levicore.silvermoon.GSM;
 import com.levicore.silvermoon.entities.MapEntity;
 import com.levicore.silvermoon.entities.battle.KadukiBattler;
+import com.levicore.silvermoon.presets.parties.Enemies_1;
 import com.levicore.silvermoon.states.BattleState;
 import com.levicore.silvermoon.utils.map.MapState;
 import com.levicore.silvermoon.utils.menu.OptionCallback;
@@ -47,7 +48,7 @@ public class BasicRPGMap extends MapState {
             public void execute() {
                 fadeOutAll(1).start(tweenManager);
                 gsm.getGame().getInputMultiplexer().removeProcessor(basicRPGMap);
-                gsm.push(new BattleState(gsm, basicRPGMap, Assets.getMusic("battle"), BattleState.PHASE.TURN_START));
+                gsm.push(new BattleState(gsm, basicRPGMap, Assets.getMusic("battle"), BattleState.PHASE.TURN_START, gsm.getGame().player.getParty(), Enemies_1.createDummies()));
             }
         });
 
