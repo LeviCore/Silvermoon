@@ -12,8 +12,20 @@ public abstract class Equipment extends Item {
     private BattleEntity battleEntity;
     private EQUIPMENT_TYPE equipment_type;
 
-    public Equipment(BattleEntity battleEntity, EQUIPMENT_TYPE equipment_type, Entity icon, String description) {
-        super(icon, description);
+    public Equipment(BattleEntity battleEntity, EQUIPMENT_TYPE equipment_type, Entity icon, String name, String description) {
+        super(icon, name, description);
+        this.battleEntity = battleEntity;
+        this.equipment_type = equipment_type;
+    }
+
+    public Equipment(Entity icon, String name, String description, BattleEntity battleEntity, EQUIPMENT_TYPE equipment_type) {
+        super(icon, name, description);
+        this.battleEntity = battleEntity;
+        this.equipment_type = equipment_type;
+    }
+
+    public Equipment(Entity icon, String name, String description, int cost, BattleEntity battleEntity, EQUIPMENT_TYPE equipment_type) {
+        super(icon, name, description, cost);
         this.battleEntity = battleEntity;
         this.equipment_type = equipment_type;
     }

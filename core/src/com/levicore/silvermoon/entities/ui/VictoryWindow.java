@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.levicore.silvermoon.*;
 import com.levicore.silvermoon.Character;
+import com.levicore.silvermoon.core.Item;
 import com.levicore.silvermoon.entities.Entity;
 import com.levicore.silvermoon.states.BattleState;
 
@@ -19,8 +20,7 @@ import java.util.List;
  */
 public class VictoryWindow {
 
-    // TODO : ITEMS INFO
-    // TODO : EXP GAINED TWEENING, NOTE ADD EXP AFTER TWEENED
+    // TODO : FINISH THIS ASAP (Smoothen transitions, Exp gained tweening, connect to BattleState)
 
     private State battleState;
     private PHASE phase;
@@ -46,7 +46,7 @@ public class VictoryWindow {
     private float fontWidth;
     private float fontHeight;
 
-    public VictoryWindow(State battleState, BitmapFont bitmapFont, List<Character> characters, List<SimpleItemInfo> itemsGained) {
+    public VictoryWindow(State battleState, BitmapFont bitmapFont, List<Character> characters, List<Item> items) {
         this.battleState = battleState;
         phase = PHASE.CHARACTER_INFO;
 
@@ -72,11 +72,20 @@ public class VictoryWindow {
 
         // Set default size of character face and position
         for(Character character : characters) {
-            characterInfoList.add(new CharacterInfo(character, null, this.bitmapFont, curX, curY));
+            characterInfoList.add(new CharacterInfo(character, null, curX, curY));
             curX += intervalX + character.getCharacterFace().getWidth();
         }
 
-        this.itemsGained = itemsGained;
+        itemsGained = new ArrayList<>();
+
+        for(Item item : items) {
+            itemsGained.add(new SimpleItemInfo(item, bitmapFont));
+        }
+
+        for(SimpleItemInfo simpleItemInfo : itemsGained) {
+//            simpleItemInfo.setPosition();
+        }
+
     }
 
     public void update(float delta) {

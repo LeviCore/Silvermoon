@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.levicore.silvermoon.*;
 import com.levicore.silvermoon.Character;
 import com.levicore.silvermoon.entities.Entity;
+import com.levicore.silvermoon.entities.TextEntity;
 
 /**
  * Created by user on 2/10/2015.
@@ -18,14 +19,13 @@ public class CharacterInfo extends Entity {
 
     private Entity background;
     private PercentageBar expBar;
-    private BitmapFont bitmapFont;
+    private TextEntity characterName;
 
-    public CharacterInfo(Character character, Entity background, BitmapFont bitmapFont, float x, float y) {
+    public CharacterInfo(Character character, Entity background, float x, float y) {
         super(character.getCharacterFace());
 
         this.character = character;
         this.background = background;
-        this.bitmapFont = bitmapFont != null ? bitmapFont : new BitmapFont();
 
         setSize(96, 96);
         setPosition(x, y);
@@ -34,7 +34,8 @@ public class CharacterInfo extends Entity {
         expBar.setMaxWidth(96);
         expBar.setPosition(getX(), getY() - expBar.getHeight() - 5);
 
-        textwidth = this.bitmapFont.getWrappedBounds(character.getName(), getWidth()).width;
+        characterName = new TextEntity(null, character.getName(), null, 0, expBar.getY() - 5, getWidth());
+        characterName.setX(getX() + (getWidth() / 2) - (characterName.getWidth() / 2));
     }
 
     @Override
@@ -48,6 +49,9 @@ public class CharacterInfo extends Entity {
 
         expBar.setColor(getColor().r, getColor().g, getColor().b, getColor().a);
         expBar.update(delta);
+
+        characterName.setColor(getColor());
+        characterName.update(delta);
     }
 
     @Override
@@ -55,6 +59,6 @@ public class CharacterInfo extends Entity {
         if(background != null) background.draw(batch);
         super.draw(batch);
         expBar.draw(batch);
-        bitmapFont.drawWrapped(batch, character.getName(), getX() + (getWidth() / 2) - (textwidth / 2), expBar.getY() - 5, getWidth());
+        characterName.draw(batch);
     }
 }

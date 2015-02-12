@@ -3,6 +3,7 @@ package test;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.levicore.silvermoon.*;
 import com.levicore.silvermoon.Character;
+import com.levicore.silvermoon.core.Item;
 import com.levicore.silvermoon.entities.Entity;
 import com.levicore.silvermoon.entities.ui.SimpleItemInfo;
 import com.levicore.silvermoon.entities.ui.VictoryWindow;
@@ -27,9 +28,10 @@ public class StateTest extends State {
         characters.add(new Character(null, null, new Entity(Assets.FACES_ATLAS.findRegion("$Actor63_Normal")), "Jason"));
         characters.add(new Character(null, null, new Entity(Assets.FACES_ATLAS.findRegion("$Actor63_Normal")), "Mark"));
 
-        List<SimpleItemInfo> simpleItemInfos = new ArrayList<>();
+        List<Item> itemsGained = new ArrayList<>();
+        itemsGained.add(new Item(new Entity(Assets.FACES_ATLAS.findRegion("$Actor63_Normal")), "axe", ""));
 
-        victoryWindow = new VictoryWindow(this, null, characters, simpleItemInfos);
+        victoryWindow = new VictoryWindow(this, gsm.getBitmapFont(), characters, itemsGained);
     }
 
     @Override
@@ -45,7 +47,6 @@ public class StateTest extends State {
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         victoryWindow.next();
-
         return super.touchUp(screenX, screenY, pointer, button);
     }
 

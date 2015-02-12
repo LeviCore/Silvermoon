@@ -1,5 +1,6 @@
 package com.levicore.silvermoon;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -66,6 +67,10 @@ public class GSM {
 
     public BitmapFont getBitmapFont() {
         return game.getBitmapFont();
+    }
+
+    public void resetBitmapFontColor() {
+        getBitmapFont().setColor(Color.WHITE);
     }
 
     public Silvermoon getGame() {

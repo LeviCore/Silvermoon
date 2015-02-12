@@ -8,11 +8,12 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.levicore.silvermoon.states.Title;
 import com.levicore.silvermoon.utils.debug.DebugState;
+import test.StateTest;
 
 public class Silvermoon extends ApplicationAdapter {
 
 	// TODO Database
-	// TODO : MOVE ALL ASSETS TO DATABASE
+    // TODO Check if frame rate drops
 
 	public static String TITLE = "Silvermoon";
 	public static int SCREEN_WIDTH = 640;
@@ -24,6 +25,8 @@ public class Silvermoon extends ApplicationAdapter {
 	private BitmapFont bitmapFont;
 
 	boolean selfSwitch = true;
+
+    private boolean debug = true;
 
 	@Override
 	public void create () {
@@ -48,7 +51,8 @@ public class Silvermoon extends ApplicationAdapter {
 			if(selfSwitch) {
 				Assets.initResources();
 
-				gsm.push(new Title(gsm));
+//				gsm.push(new Title(gsm));
+                gsm.push(new StateTest(gsm));
                 gsm.push(new DebugState(gsm));
 
 				selfSwitch = false;
@@ -57,6 +61,10 @@ public class Silvermoon extends ApplicationAdapter {
 			gsm.update(delta);
 			gsm.render(spriteBatch, delta);
 		}
+
+        if(debug) {
+            Gdx.graphics.setTitle(TITLE + " " + Gdx.graphics.getFramesPerSecond());
+        }
 	}
 
 	@Override

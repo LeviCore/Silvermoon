@@ -17,14 +17,13 @@ import java.util.Map;
  */
 public class Assets {
 
+    private static AssetManager manager = new AssetManager();
+
     public static TextureAtlas SYSTEM_ATLAS = new TextureAtlas("data/System.pack");
     public static TextureAtlas TITLE_ATLAS = new TextureAtlas("data/title/Title.pack");
     public static TextureAtlas FACES_ATLAS = new TextureAtlas("data/Faces.pack");
 
     public static List<Animation> TITLE_OPTION_ANIMATIONS = new ArrayList<>();
-
-
-    private static AssetManager manager = new AssetManager();
 
     private static Map<String, Texture> textures = new HashMap<>();
     private static Map<String, Sound> soundEffects = new HashMap<>();
