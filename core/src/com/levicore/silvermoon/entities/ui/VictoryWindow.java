@@ -10,6 +10,7 @@ import com.levicore.silvermoon.*;
 import com.levicore.silvermoon.Character;
 import com.levicore.silvermoon.core.Item;
 import com.levicore.silvermoon.entities.Entity;
+import com.levicore.silvermoon.entities.TextEntity;
 import com.levicore.silvermoon.states.BattleState;
 
 import java.util.ArrayList;
@@ -21,7 +22,6 @@ import java.util.List;
 public class VictoryWindow {
 
     // TODO : FINISH THIS ASAP (Smoothen transitions, Exp gained tweening, connect to BattleState)
-
     private State battleState;
     private PHASE phase;
 
@@ -30,8 +30,9 @@ public class VictoryWindow {
     private List<CharacterInfo> characterInfoList;
     private List<SimpleItemInfo> itemsGained;
 
+    private TextEntity instruction;
+
     private Entity background;
-    private BitmapFont bitmapFont;
 
     float x;
     float y;
@@ -46,7 +47,7 @@ public class VictoryWindow {
     private float fontWidth;
     private float fontHeight;
 
-    public VictoryWindow(State battleState, BitmapFont bitmapFont, List<Character> characters, List<Item> items) {
+    public VictoryWindow(State battleState, List<Character> characters, List<Item> items) {
         this.battleState = battleState;
         phase = PHASE.CHARACTER_INFO;
 
@@ -58,6 +59,7 @@ public class VictoryWindow {
 
         background = new Entity(Assets.SYSTEM_ATLAS.findRegion("Skill_Info_Background"));
         background.setSize(width, height);
+        background.setPosition(x, y);
 
         float curX = x + insetX;
         float curY = y + insetY;
@@ -66,9 +68,9 @@ public class VictoryWindow {
 
         text = "Tap to continue.";
 
-        this.bitmapFont = bitmapFont != null ? bitmapFont : new BitmapFont();
-        fontWidth = this.bitmapFont.getBounds(text).width;
-        fontHeight = this.bitmapFont.getBounds(text).height;
+        instruction = new TextEntity(null, text, null, 0, 0);
+        instruction.setX(-instruction.getWidth() / 2);
+        instruction.setY(-100);
 
         // Set default size of character face and position
         for(Character character : characters) {
@@ -79,53 +81,51 @@ public class VictoryWindow {
         itemsGained = new ArrayList<>();
 
         for(Item item : items) {
-            itemsGained.add(new SimpleItemInfo(item, bitmapFont));
+            itemsGained.add(new SimpleItemInfo(item, null));
         }
 
+        curX = 0;
+        curY = 0;
+
         for(SimpleItemInfo simpleItemInfo : itemsGained) {
-//            simpleItemInfo.setPosition();
+            simpleItemInfo.setAlpha(0);
+            simpleItemInfo.setPosition(background.getX() + insetX + 10 + curX, background.getY() + background.getHeight() - (insetY + 10) + curY);
+            curY += -simpleItemInfo.getHeight() - 5;
+
+            if(curY == -37 * 3) {
+                curX += 200;
+                curY += 37 * 3;
+            }
         }
 
     }
 
     public void update(float delta) {
-        background.setPosition(x, y);
         background.update(delta);
+        instruction.update(delta);
+        instruction.setColor(background.getColor());
 
-        switch (phase) {
-            case CHARACTER_INFO:
-                for(CharacterInfo characterInfo : characterInfoList) {
-                    characterInfo.update(delta);
-                }
+        for(CharacterInfo characterInfo : characterInfoList) {
+            characterInfo.update(delta);
+        }
 
-                break;
-            case ITEMS_INFO:
-                for(SimpleItemInfo simpleItemInfo : itemsGained) {
-                    simpleItemInfo.update(delta);
-                }
-                break;
+        for(SimpleItemInfo simpleItemInfo : itemsGained) {
+            simpleItemInfo.update(delta);
         }
     }
 
     public void render(SpriteBatch batch) {
         background.draw(batch);
 
-        switch (phase) {
-            case CHARACTER_INFO :
-                for(CharacterInfo characterInfo : characterInfoList) {
-                    characterInfo.draw(batch);
-                }
-
-                bitmapFont.draw(batch, text, -fontWidth / 2, -100  );
-
-                break;
-            case ITEMS_INFO :
-                for(SimpleItemInfo simpleItemInfo : itemsGained) {
-                    simpleItemInfo.draw(batch);
-                }
-
-                break;
+        for(CharacterInfo characterInfo : characterInfoList) {
+            characterInfo.draw(batch);
         }
+
+        for(SimpleItemInfo simpleItemInfo : itemsGained) {
+            simpleItemInfo.draw(batch);
+        }
+
+        instruction.draw(batch);
     }
 
     public void updateAndRender(float delta, SpriteBatch batch) {
@@ -140,7 +140,7 @@ public class VictoryWindow {
             case CHARACTER_INFO:
                 Timeline.createSequence()
                         .push(fadeOutCharacterInfos(0.25f))
-                        .push(fadeInItemsGained(1))
+                        .push(fadeInItemsGained(0.25f))
                         .push(Tween.call(new TweenCallback() {
                             @Override
                             public void onEvent(int type, BaseTween<?> source) {
@@ -148,7 +148,6 @@ public class VictoryWindow {
                             }
                         }))
                         .start(battleState.getTweenManager());
-
                 break;
             case ITEMS_INFO:
                 // TODO : CALL RETURN TO MAPSTATE
@@ -164,7 +163,7 @@ public class VictoryWindow {
         Timeline timeline = Timeline.createParallel();
 
         for(CharacterInfo characterInfo : characterInfoList) {
-            timeline.push(characterInfo.fadeIn(duration)    );
+            timeline.push(characterInfo.fadeIn(duration));
         }
 
         return timeline;

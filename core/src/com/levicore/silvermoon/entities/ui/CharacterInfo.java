@@ -35,7 +35,7 @@ public class CharacterInfo extends Entity {
         expBar.setPosition(getX(), getY() - expBar.getHeight() - 5);
 
         characterName = new TextEntity(null, character.getName(), null, 0, expBar.getY() - 5, getWidth());
-        characterName.setX(getX() + (getWidth() / 2) - (characterName.getWidth() / 2));
+        characterName.setX(getX() - (characterName.getWidth() / 2) + (getWidth() / 2));
     }
 
     @Override

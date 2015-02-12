@@ -3,7 +3,7 @@ package com.levicore.silvermoon.entities;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.sun.istack.internal.Nullable;
 
 /**
  * Created by user on 2/12/2015.
@@ -23,7 +23,7 @@ public class TextEntity {
 
     private Color color;
 
-    public TextEntity(BitmapFont bitmapFont, String text, Color color, float x, float y) {
+    public TextEntity(@Nullable BitmapFont bitmapFont, String text, Color color, float x, float y) {
         this.bitmapFont = bitmapFont != null ? bitmapFont : new BitmapFont();
         this.text = text;
 
@@ -31,11 +31,13 @@ public class TextEntity {
         this.y = y;
 
         this.color = color;
+
+        update(0);
 
         wrapWidth = 0;
     }
 
-    public TextEntity(BitmapFont bitmapFont, String text, Color color, float x, float y, float wrapWidth) {
+    public TextEntity(@Nullable BitmapFont bitmapFont, String text, Color color, float x, float y, float wrapWidth) {
         this.bitmapFont = bitmapFont != null ? bitmapFont : new BitmapFont();
         this.text = text;
 
@@ -43,6 +45,8 @@ public class TextEntity {
         this.y = y;
 
         this.color = color;
+
+        update(0);
 
         this.wrapWidth = wrapWidth;
     }
@@ -51,7 +55,6 @@ public class TextEntity {
         BitmapFont.TextBounds textBounds = wrapWidth != 0 ? bitmapFont.getWrappedBounds(text, wrapWidth) : bitmapFont.getBounds(text);
         width = textBounds.width;
         height = textBounds.height;
-
     }
 
     public void draw(Batch batch) {

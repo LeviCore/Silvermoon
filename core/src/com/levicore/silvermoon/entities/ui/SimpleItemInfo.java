@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.levicore.silvermoon.entities.Entity;
 import com.levicore.silvermoon.core.Item;
 import com.levicore.silvermoon.entities.TextEntity;
+import com.sun.istack.internal.Nullable;
 
 /**
  * Created by user on 2/11/2015.
@@ -19,7 +20,7 @@ public class SimpleItemInfo extends Entity {
 
     private float insetX = 16;
 
-    public SimpleItemInfo(Item item, BitmapFont bitmapFont) {
+    public SimpleItemInfo(Item item, @Nullable BitmapFont bitmapFont) {
         super(item.getIcon());
         this.item = item;
         this.bitmapFont = bitmapFont != null ? bitmapFont : new BitmapFont();
@@ -34,6 +35,8 @@ public class SimpleItemInfo extends Entity {
     @Override
     public void update(float delta) {
         super.update(delta);
+        itemName.setX(getX() + getWidth() + insetX);
+        itemName.setY(getY() + (itemName.getHeight() / 2) + (getHeight() / 2));
         itemName.setColor(getColor());
         itemName.update(delta);
     }

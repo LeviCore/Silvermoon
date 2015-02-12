@@ -53,7 +53,7 @@ public class Silvermoon extends ApplicationAdapter {
 
 //				gsm.push(new Title(gsm));
                 gsm.push(new StateTest(gsm));
-                gsm.push(new DebugState(gsm));
+//                gsm.push(new DebugState(gsm));
 
 				selfSwitch = false;
 			}

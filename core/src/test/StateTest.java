@@ -30,8 +30,19 @@ public class StateTest extends State {
 
         List<Item> itemsGained = new ArrayList<>();
         itemsGained.add(new Item(new Entity(Assets.FACES_ATLAS.findRegion("$Actor63_Normal")), "axe", ""));
+        itemsGained.add(new Item(new Entity(Assets.FACES_ATLAS.findRegion("$Actor63_Normal")), "qwe", ""));
+        itemsGained.add(new Item(new Entity(Assets.FACES_ATLAS.findRegion("$Actor63_Normal")), "axqwee", ""));
 
-        victoryWindow = new VictoryWindow(this, gsm.getBitmapFont(), characters, itemsGained);
+        itemsGained.add(new Item(new Entity(Assets.FACES_ATLAS.findRegion("$Actor63_Normal")), "axqwee", ""));
+        itemsGained.add(new Item(new Entity(Assets.FACES_ATLAS.findRegion("$Actor63_Normal")), "axqwee", ""));
+        itemsGained.add(new Item(new Entity(Assets.FACES_ATLAS.findRegion("$Actor63_Normal")), "axqwee", ""));
+
+        itemsGained.add(new Item(new Entity(Assets.FACES_ATLAS.findRegion("$Actor63_Normal")), "axqwee", ""));
+        itemsGained.add(new Item(new Entity(Assets.FACES_ATLAS.findRegion("$Actor63_Normal")), "axqwee", ""));
+        itemsGained.add(new Item(new Entity(Assets.FACES_ATLAS.findRegion("$Actor63_Normal")), "axqwee", ""));
+
+
+        victoryWindow = new VictoryWindow(this, characters, itemsGained);
     }
 
     @Override

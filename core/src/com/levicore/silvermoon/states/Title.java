@@ -20,6 +20,9 @@ import java.util.List;
 public class Title extends State {
 
     // TODO Reposition Arrows based on width of option
+    // TODO CHANGE BG_MUSIC!!!!
+    // TODO CHANGE LOGO
+
     private Entity leftArrow;
     private Entity rightArrow;
     private Entity option;
