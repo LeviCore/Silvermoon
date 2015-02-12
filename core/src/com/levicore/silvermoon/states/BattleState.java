@@ -167,7 +167,7 @@ public class BattleState extends State {
         }
 
 
-//        drawBattlerNames(batch);
+        drawBattlerNames(batch);
         drawAndUpdateTemporaryEntities(delta, batch);
 
         db.draw(batch);
