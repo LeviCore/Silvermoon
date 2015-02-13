@@ -18,8 +18,6 @@ import com.levicore.silvermoon.utils.menu.OptionCallback;
 */
 public class BasicRPGMap extends MapState {
 
-
-
     /** Test */
     public BasicRPGMap(final GSM gsm) {
         super(gsm, "Introduction", gsm.getGame().player.getParty().get(0).getMapEntity(), new int[]{ 0, 1 }, new int[]{ 2 }, new int[] { 3, 4 });
@@ -42,8 +40,8 @@ public class BasicRPGMap extends MapState {
 
     @Override
     public void update(float delta) {
-        super.update(delta);
         focusWithGrid(controlledCharacter);
+        super.update(delta);
     }
 
     @Override

@@ -14,7 +14,6 @@ public class AnimationTimelines {
 
     public static Timeline SLASH(State state, BattleEntity target, float x, float y) {
         //TODO REPLACE SOUND AND ANIMATION ASSET THESE ARE FROM RPGMAKER
-
         Timeline timeline = Timeline.createSequence();
 
         timeline.push(state.createTemporaryTweenAnimation(target.getWidth(), target.getHeight(), x, y, SkillAnimations.SWORD_SLASH()));

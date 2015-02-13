@@ -11,7 +11,6 @@ public class Character {
 
     // TODO equipments
     // TODO LEVELS
-
     private int level;
     private float curExp = 0;
     private float toNextLevel = 100;

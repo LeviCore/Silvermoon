@@ -138,7 +138,6 @@ public class VictoryWindow {
     }
 
 
-    // TODO : Execute phase switching here.
     public Timeline next() {
         switch (phase) {
             case UNSTARTED :
@@ -163,7 +162,6 @@ public class VictoryWindow {
                         }))
                         .start(battleState.getTweenManager());
             case ITEMS_INFO:
-                // TODO : CALL RETURN TO MAPSTATE
                 return fadeOutVictoryWindow(0.25f).start(battleState.getTweenManager());
         }
 

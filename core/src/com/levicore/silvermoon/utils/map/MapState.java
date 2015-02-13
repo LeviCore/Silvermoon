@@ -128,12 +128,9 @@ public class MapState extends State {
     public void update(float delta) {
         super.update(delta);
 
-        for(MapEntity mapEntity : mapEntities) {
-            mapEntity.update(delta);
-        }
-
         /** Scroll through mapEntities entities */
         for(MapEntity mapEntity : mapEntities) {
+            mapEntity.update(delta);
 
             /** Collision detection of entities */
             for (MapEntity comparedEntity : mapEntities) {
@@ -157,13 +154,14 @@ public class MapState extends State {
                 }
             }
         }
+
+        renderer.setView(camera);
     }
 
     @Override
     public void render(SpriteBatch batch, float delta) {
         super.render(batch, delta);
 
-        renderer.setView(camera);
         renderer.render(groundLayers);
         renderer.render(collisionLayers);
 
@@ -216,8 +214,6 @@ public class MapState extends State {
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         if(mainControlsEnabled) {
-            controlledCharacter.setVelocity(0, 0);
-
             if(buttonA.contains(uiCoordinates.x, uiCoordinates.y)) {
                 /** Loop for entity Interaction */
                 for(MapEntity mapEntity : mapEntities) {
@@ -228,6 +224,8 @@ public class MapState extends State {
 
             } else if(buttonB.contains(uiCoordinates.x, uiCoordinates.y)) {
                 System.out.print("B");
+            } else {
+                controlledCharacter.setVelocity(0, 0);
             }
         }
 
