@@ -34,9 +34,7 @@ public class Player {
         // ==============================================================
 
 
-        MapEntity vince = new MapEntity(s.IDLE, 100);
-        vince.setPosition(0, 0);
-        vince.initKadukiDefaultAnimations("$Actor63", 32, 32);
+        MapEntity vince = new MapEntity("$Actor63", 32, 32, 100);
 
         party.add(
                 new Character(vince, Monsters_A.createDummy(), new Entity(Assets.FACES_ATLAS.findRegion("$Actor63_Normal")), "Levi")

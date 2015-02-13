@@ -43,7 +43,6 @@ public class MapState extends State {
     protected List<Rectangle> bounds;
     protected List<MapEntity> mapEntities;
 
-    //TODO : put mapstate ui all inside a pack
     protected DialogBox dialogBox;
     protected Entity arrow_buttons;
     protected Entity buttonA;
@@ -56,10 +55,14 @@ public class MapState extends State {
 
     protected float mapAlpha;
 
+    protected MapEntity controlledCharacter;
     protected boolean mainControlsEnabled = false;
 
-    protected MapState(GSM gsm, String mapName, int[] groundLayers, int[] collisionLayers, int[] foregroundLayers) {
+    protected MapState(GSM gsm, String mapName, MapEntity controlledCharacter, int[] groundLayers, int[] collisionLayers, int[] foregroundLayers) {
         super(gsm);
+
+        this.controlledCharacter = controlledCharacter;
+        mapEntities.add(controlledCharacter);
 
         this.groundLayers = groundLayers;
         this.collisionLayers = collisionLayers;
@@ -95,11 +98,14 @@ public class MapState extends State {
         Timeline.createSequence()
                 .push(Tween.to(renderer.getBatch(), SpriteBatchAccessor.ALPHA, 0).target(0).start(tweenManager))
                 .push(Tween.to(renderer.getBatch(), SpriteBatchAccessor.ALPHA, 1).target(1).start(tweenManager));
+
+        mainControlsEnabled = true;
     }
 
     @Override
     protected void initialize() {
         mapEntities = new ArrayList<>();
+
         mapAlpha = 1;
 
         arrow_buttons = new Entity("Arrow_Buttons.png");
@@ -122,10 +128,12 @@ public class MapState extends State {
     public void update(float delta) {
         super.update(delta);
 
+        for(MapEntity mapEntity : mapEntities) {
+            mapEntity.update(delta);
+        }
+
         /** Scroll through mapEntities entities */
         for(MapEntity mapEntity : mapEntities) {
-
-            mapEntity.update(delta);
 
             /** Collision detection of entities */
             for (MapEntity comparedEntity : mapEntities) {
@@ -149,15 +157,13 @@ public class MapState extends State {
                 }
             }
         }
-        
-        renderer.setView(camera);
     }
 
     @Override
     public void render(SpriteBatch batch, float delta) {
         super.render(batch, delta);
 
-        renderer.getBatch().setProjectionMatrix(camera.combined);
+        renderer.setView(camera);
         renderer.render(groundLayers);
         renderer.render(collisionLayers);
 
@@ -188,6 +194,61 @@ public class MapState extends State {
     public void dispose() {
         map.dispose();
         renderer.dispose();
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        if(mainControlsEnabled) {
+            if(up.contains(uiCoordinates.x, uiCoordinates.y)) {
+                controlledCharacter.setVelocity(0, 1);
+            } else if(down.contains(uiCoordinates.x, uiCoordinates.y)) {
+                controlledCharacter.setVelocity(0, -1);
+            } else if(left.contains(uiCoordinates.x, uiCoordinates.y)) {
+                controlledCharacter.setVelocity(-1, 0);
+            } else if(right.contains(uiCoordinates.x, uiCoordinates.y)) {
+                controlledCharacter.setVelocity(1, 0);
+            }
+        }
+
+        return super.touchDown(screenX, screenY, pointer, button);
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        if(mainControlsEnabled) {
+            controlledCharacter.setVelocity(0, 0);
+
+            if(buttonA.contains(uiCoordinates.x, uiCoordinates.y)) {
+                /** Loop for entity Interaction */
+                for(MapEntity mapEntity : mapEntities) {
+                    if(mapEntity.contains(controlledCharacter.getForwardX(), controlledCharacter.getForwardY())) {
+                        if(mapEntity.getCallback() != null) mapEntity.getCallback().execute();
+                    }
+                }
+
+            } else if(buttonB.contains(uiCoordinates.x, uiCoordinates.y)) {
+                System.out.print("B");
+            }
+        }
+
+        return super.touchUp(screenX, screenY, pointer, button);
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        if(mainControlsEnabled) {
+            if(up.contains(uiCoordinates.x, uiCoordinates.y)) {
+                controlledCharacter.setVelocity(0, 1);
+            } else if(down.contains(uiCoordinates.x, uiCoordinates.y)) {
+                controlledCharacter.setVelocity(0, -1);
+            } else if(left.contains(uiCoordinates.x, uiCoordinates.y)) {
+                controlledCharacter.setVelocity(-1, 0);
+            } else if(right.contains(uiCoordinates.x, uiCoordinates.y)) {
+                controlledCharacter.setVelocity(1, 0);
+            }
+        }
+
+        return super.touchDragged(screenX, screenY, pointer);
     }
 
     /**

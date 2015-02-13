@@ -54,7 +54,6 @@ public class Silvermoon extends ApplicationAdapter {
 				Assets.initResources();
 
                 player = new Player(this);
-
 				gsm.push(new Title(gsm));
 //                gsm.push(new StateTest(gsm));
 //                gsm.push(new DebugState(gsm));

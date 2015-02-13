@@ -7,6 +7,7 @@ import com.levicore.silvermoon.Assets;
 import com.levicore.silvermoon.GSM;
 import com.levicore.silvermoon.entities.MapEntity;
 import com.levicore.silvermoon.entities.battle.KadukiBattler;
+import com.levicore.silvermoon.presets.mapEntities.MainCharacterMapEntities;
 import com.levicore.silvermoon.presets.parties.Enemies_1;
 import com.levicore.silvermoon.states.BattleState;
 import com.levicore.silvermoon.utils.map.MapState;
@@ -17,32 +18,16 @@ import com.levicore.silvermoon.utils.menu.OptionCallback;
 */
 public class BasicRPGMap extends MapState {
 
-    MapEntity vince;
+
 
     /** Test */
-    ShapeRenderer sr = new ShapeRenderer();
-
-    Rectangle test = new Rectangle(0, 0, 50, 50);
-
     public BasicRPGMap(final GSM gsm) {
-        super(gsm, "Introduction", new int[]{ 0, 1 }, new int[]{ 2 }, new int[] { 3, 4 });
+        super(gsm, "Introduction", gsm.getGame().player.getParty().get(0).getMapEntity(), new int[]{ 0, 1 }, new int[]{ 2 }, new int[] { 3, 4 });
 
-
-        // Test =========================================================
-        KadukiBattler s = new KadukiBattler("$Actor63", 23, 23, 32, 32);
-        KadukiBattler k = new KadukiBattler("$Actor31", 23, 23, 32, 32);
-        // ==============================================================
-
-
-        vince = new MapEntity(s.IDLE, 100);
-        vince.setPosition(0, 0);
-        vince.initKadukiDefaultAnimations("$Actor63", 32, 32);
-
-        final MapEntity x = new MapEntity(k.IDLE, 100);
-
+        final MapEntity x = new MapEntity("$Actor63", 32, 32, 300);
         final BasicRPGMap basicRPGMap = this;
 
-        x.setPosition(50, 100);
+        x.setPosition(50, 300);
         x.setCallback(new OptionCallback() {
             @Override
             public void execute() {
@@ -52,16 +37,13 @@ public class BasicRPGMap extends MapState {
             }
         });
 
-        mapEntities.add(vince);
         mapEntities.add(x);
-
-        mainControlsEnabled = true;
     }
 
     @Override
     public void update(float delta) {
         super.update(delta);
-        focusWithGrid(vince);
+        focusWithGrid(controlledCharacter);
     }
 
     @Override
@@ -75,55 +57,7 @@ public class BasicRPGMap extends MapState {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        //UI controls
-        if(mainControlsEnabled) {
-            if(up.contains(uiCoordinates.x, uiCoordinates.y)) {
-                vince.setVelocity(0, 1);
-            } else if(down.contains(uiCoordinates.x, uiCoordinates.y)) {
-                vince.setVelocity(0, -1);
-            } else if(left.contains(uiCoordinates.x, uiCoordinates.y)) {
-                vince.setVelocity(-1, 0);
-            } else if(right.contains(uiCoordinates.x, uiCoordinates.y)) {
-                vince.setVelocity(1, 0);
-            }
-        }
-
         return super.touchDown(screenX, screenY, pointer, button);
     }
 
-    @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        if(mainControlsEnabled) {
-            vince.setVelocity(0, 0);
-
-            if(buttonA.contains(uiCoordinates.x, uiCoordinates.y)) {
-                /** Loop for entity Interaction */
-                for(MapEntity mapEntity : mapEntities) {
-                    if(mapEntity.contains(vince.getForwardX(), vince.getForwardY())) {
-                         mapEntity.getCallback().execute();
-                    }
-                }
-
-            } else if(buttonB.contains(uiCoordinates.x, uiCoordinates.y)) {
-                System.out.print("B");
-            }
-        }
-        return super.touchUp(screenX, screenY, pointer, button);
-    }
-
-    @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
-        if(mainControlsEnabled) {
-            if(up.contains(uiCoordinates.x, uiCoordinates.y)) {
-                vince.setVelocity(0, 1);
-            } else if(down.contains(uiCoordinates.x, uiCoordinates.y)) {
-                vince.setVelocity(0, -1);
-            } else if(left.contains(uiCoordinates.x, uiCoordinates.y)) {
-                vince.setVelocity(-1, 0);
-            } else if(right.contains(uiCoordinates.x, uiCoordinates.y)) {
-                vince.setVelocity(1, 0);
-            }
-        }
-        return super.touchDragged(screenX, screenY, pointer);
-    }
 }

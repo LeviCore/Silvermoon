@@ -3,6 +3,7 @@ package com.levicore.silvermoon.entities;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.tiled.renderers.OrthoCachedTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.levicore.silvermoon.utils.AnimationUtils;
@@ -71,24 +72,39 @@ public class MapEntity extends Entity {
         this.speed = speed;
     }
 
+    /**
+     * Constructor for preset Kaduki/3x3 spritesheets
+     */
+    public MapEntity(String charsetName, int regionWidth, int regionHeight, float speed) {
+        super(AnimationUtils.createAnimationFromRegions(split(new Texture("data/characters/"+charsetName+".png"), 32, 32), 0, 0.15f, Animation.PlayMode.LOOP_PINGPONG));
+        initKadukiDefaultAnimations(charsetName, regionWidth, regionHeight);
+
+        collisionRectangle = new Rectangle();
+        collisionRectangle.width = getBoundingRectangle().width;
+        collisionRectangle.height = getBoundingRectangle().height / 2;
+
+        velocity = new Vector2();
+        this.speed = speed;
+    }
+
     @Override
     public void update(float delta) {
         super.update(delta);
 
         if(animation != null) {
-            if (velocity.x == 100) {
+            if (velocity.x > 0) {
                 setAnimation_nonReset_void(right);
                 direction = DIRECTION.RIGHT;
 
-            } else if (velocity.x == -100) {
+            } else if (velocity.x < 0) {
                 setAnimation_nonReset_void(left);
                 direction = DIRECTION.LEFT;
 
-            } else if (velocity.y == 100) {
+            } else if (velocity.y > 0) {
                 setAnimation_nonReset_void(up);
                 direction = DIRECTION.UP;
 
-            } else if (velocity.y == -100) {
+            } else if (velocity.y < 0) {
                 setAnimation_nonReset_void(down);
                 direction = DIRECTION.DOWN;
 
@@ -102,8 +118,8 @@ public class MapEntity extends Entity {
         oldX = getX();
         oldY = getY();
 
-        setX(getX() + velocity.x * delta);
-        setY(getY() + velocity.y * delta);
+        setX(getX() + (velocity.x) * delta);
+        setY(getY() + (velocity.y) * delta);
     }
 
     /**

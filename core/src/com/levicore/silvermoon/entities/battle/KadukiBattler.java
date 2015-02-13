@@ -62,4 +62,10 @@ public class KadukiBattler extends BattleEntity {
         });
     }
 
+    public void flipBattler_void(boolean x, boolean y) {
+        AnimationUtils.flipTextureRegions(char_1, x, y);
+        AnimationUtils.flipTextureRegions(char_2, x, y);
+        AnimationUtils.flipTextureRegions(char_3, x, y);
+    }
+
 }

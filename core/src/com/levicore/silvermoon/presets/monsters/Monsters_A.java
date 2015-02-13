@@ -9,8 +9,9 @@ public class Monsters_A {
 
     public static KadukiBattler createDummy() {
         KadukiBattler kadukiBattler = new KadukiBattler("$Actor63", 0, 0, 32, 32);
+        kadukiBattler.flipBattler_void(true, false);
 
-        kadukiBattler.name = "haha";
+        kadukiBattler.name = "Dummy";
 
         kadukiBattler.maxHP = 1;
         kadukiBattler.curHP = 1;
