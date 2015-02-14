@@ -107,20 +107,33 @@ public class BattleState extends State {
         victoryWindow = new VictoryWindow(this, characters, itemDrops);
 
         // Set first 4 as active battlers, TODO position them.
-
         float x = -Silvermoon.SCREEN_WIDTH / 3;
         float xSkew = 0;
 
         float y = 0;
 
         for (int i = 0; i < 4; i++) {
-            Character character = characters.get(i);
-            if(character != null) {
-                character.getBattleEntity().setPosition(x + xSkew, y);
-                y -= character.getBattleEntity().getHeight() + 15;
-                xSkew -= 15;
-                partyA.add(character.getBattleEntity());
+            if(i <= characters.size() - 1) {
+                Character character = characters.get(i);
+
+                if (character != null) {
+                    character.getBattleEntity().setPosition(x + xSkew, y);
+                    y -= character.getBattleEntity().getHeight() + 15;
+                    xSkew -= 15;
+                    partyA.add(character.getBattleEntity());
+                }
             }
+
+        }
+
+        x = Silvermoon.SCREEN_WIDTH / 3;
+        xSkew = 0;
+        y = 0;
+
+        for(BattleEntity battleEntity : enemies) {
+            battleEntity.setPosition(x + xSkew, y);
+            y -= battleEntity.getHeight() + 15;
+            xSkew += 15;
         }
 
         partyB.addAll(enemies);

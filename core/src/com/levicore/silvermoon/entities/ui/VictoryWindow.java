@@ -31,6 +31,7 @@ public class VictoryWindow {
     private List<SimpleItemInfo> itemsGained;
 
     private TextEntity instruction;
+    private TextEntity itemDescription;
 
     private Entity background;
 
@@ -73,6 +74,8 @@ public class VictoryWindow {
         instruction.setX(-instruction.getWidth() / 2);
         instruction.setY(-100);
 
+        itemDescription = new TextEntity(null, "", null, 0, 0);
+
         // Set default size of character face and position
         for(Character character : characters) {
             characterInfoList.add(new CharacterInfo(character, null, curX, curY));
@@ -106,8 +109,12 @@ public class VictoryWindow {
 
     public void update(float delta) {
         background.update(delta);
+
         instruction.update(delta);
         instruction.setColor(background.getColor());
+
+        itemDescription.update(delta);
+        itemDescription.setColor(background.getColor());
 
         for(CharacterInfo characterInfo : characterInfoList) {
             characterInfo.update(delta);
@@ -130,6 +137,7 @@ public class VictoryWindow {
         }
 
         instruction.draw(batch);
+        itemDescription.draw(batch);
     }
 
     public void updateAndRender(float delta, SpriteBatch batch) {
@@ -157,6 +165,11 @@ public class VictoryWindow {
                         .push(Tween.call(new TweenCallback() {
                             @Override
                             public void onEvent(int type, BaseTween<?> source) {
+                                if(itemsGained.isEmpty()) {
+                                    itemDescription.setText("No items gained.");
+                                    itemDescription.setX(-itemDescription.getWidth() / 2);
+                                }
+
                                 phase = PHASE.ITEMS_INFO;
                             }
                         }))

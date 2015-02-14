@@ -70,6 +70,7 @@ public class TextEntity {
      */
     public void setText(String text) {
         this.text = text;
+        update(Float.MIN_VALUE);
     }
 
     public void setX(float x) {

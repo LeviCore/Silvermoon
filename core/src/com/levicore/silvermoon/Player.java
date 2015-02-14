@@ -2,6 +2,7 @@ package com.levicore.silvermoon;
 
 import com.levicore.silvermoon.entities.Entity;
 import com.levicore.silvermoon.entities.MapEntity;
+import com.levicore.silvermoon.entities.battle.BattleEntity;
 import com.levicore.silvermoon.entities.battle.KadukiBattler;
 import com.levicore.silvermoon.inventory.ItemPage;
 import com.levicore.silvermoon.inventory.ItemStorage;
@@ -28,37 +29,36 @@ public class Player {
         this.game = game;
         itemStorage.addItemPage(new ItemPage(9));
 
-        // Test =========================================================
-        KadukiBattler s = new KadukiBattler("$Actor63", 23, 23, 32, 32);
-        KadukiBattler k = new KadukiBattler("$Actor31", 23, 23, 32, 32);
-        // ==============================================================
-
-
         MapEntity vince = new MapEntity("$Actor63", 32, 32, 100);
 
-        party.add(
-                new Character(vince, Monsters_A.createDummy(), new Entity(Assets.FACES_ATLAS.findRegion("$Actor63_Normal")), "Levi")
+        party.add(new Character(vince, new KadukiBattler("$Actor33", 0, 0, 32, 32), new Entity(Assets.FACES_ATLAS.findRegion("$Actor63_Normal")), "Levi"));
+        party.add(new Character(vince, new KadukiBattler("$Actor33", 0, 0, 32, 32), new Entity(Assets.FACES_ATLAS.findRegion("$Actor63_Normal")), "Levi"));
+        party.add(new Character(vince, new KadukiBattler("$Actor33", 0, 0, 32, 32), new Entity(Assets.FACES_ATLAS.findRegion("$Actor63_Normal")), "Levi"));
+        party.add(new Character(vince, new KadukiBattler("$Actor33", 0, 0, 32, 32), new Entity(Assets.FACES_ATLAS.findRegion("$Actor63_Normal")), "Levi"));
 
-        );
-
-        party.add(
-                new Character(vince, Monsters_A.createDummy(), new Entity(Assets.FACES_ATLAS.findRegion("$Actor63_Normal")), "Levi")
-
-        );
-
-        party.add(
-                new Character(vince, Monsters_A.createDummy(), new Entity(Assets.FACES_ATLAS.findRegion("$Actor63_Normal")), "Levi")
-
-        );
-
-        party.add(
-                new Character(vince, Monsters_A.createDummy(), new Entity(Assets.FACES_ATLAS.findRegion("$Actor63_Normal")), "Levi")
-
-        );
 
         for(Character character : party) {
-            character.getBattleEntity().setX(-400);
+            ((KadukiBattler) character.getBattleEntity()).flipBattler_void(true, false);
+            character.getBattleEntity().name = "Dummy";
+
+            character.getBattleEntity().setWeapon(new Entity("data/images/icons/sword_1.png"));
+
+            character.getBattleEntity().maxHP = 1;
+            character.getBattleEntity().curHP = 1;
+
+            character.getBattleEntity().maxMP = 1;
+            character.getBattleEntity().curMP = 1;
+
+            character.getBattleEntity().maxMP = 1;
+            character.getBattleEntity().curTP = 1;
+
+            character.getBattleEntity().speed = 1;
+
+            for (Character characterY : party) {
+                characterY.getBattleEntity().setX(-400);
+            }
         }
+
     }
 
     public void engageBattle() {

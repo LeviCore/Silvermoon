@@ -14,7 +14,6 @@ public class Enemies_1 {
         List<BattleEntity> battleEntities = new ArrayList<>();
 
         battleEntities.add(Monsters_A.createDummy());
-        battleEntities.add(Monsters_A.createDummy());
 
         return battleEntities;
     }
