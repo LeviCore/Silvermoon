@@ -19,9 +19,11 @@ public class Assets {
 
     private static AssetManager manager = new AssetManager();
 
-    public static TextureAtlas SYSTEM_ATLAS = new TextureAtlas("data/System.pack");
+    public static TextureAtlas SYSTEM_ATLAS = new TextureAtlas("data/system/System.pack");
     public static TextureAtlas TITLE_ATLAS = new TextureAtlas("data/title/Title.pack");
-    public static TextureAtlas FACES_ATLAS = new TextureAtlas("data/Faces.pack");
+    public static TextureAtlas FACES_ATLAS = new TextureAtlas("data/faces/Faces.pack");
+    public static TextureAtlas ICONS_ATLAS = new TextureAtlas("data/icons/Icons.pack");
+    public static TextureAtlas ANIMATIONS = new TextureAtlas("data/animations/Slash.pack");
 
     public static List<Animation> TITLE_OPTION_ANIMATIONS = new ArrayList<>();
 
@@ -29,15 +31,12 @@ public class Assets {
     private static Map<String, Sound> soundEffects = new HashMap<>();
     private static Map<String, Music> music = new HashMap<>();
 
-    /** Animations */
-    public static TextureAtlas SLASH_ANIMATION = new TextureAtlas("data/animations/Slash.pack");
-
     /**
      * Loads required assets for the game
      */
     public static void queueLoading() {
         // Load textures
-        manager.load("data/badlogic.jpg", Texture.class);
+//        manager.load("data/badlogic.jpg", Texture.class);
 
         // Load sound effects
         manager.load("data/sound/Slash1.ogg", Sound.class);
@@ -52,7 +51,7 @@ public class Assets {
      */
     public static void initResources() {
         // Textures
-        textures.put("splash", manager.get("data/badlogic.jpg", Texture.class));
+//        textures.put("splash", manager.get("data/badlogic.jpg", Texture.class));
 
         // Sounds Effects
         soundEffects.put("slash_1", manager.get("data/sound/Slash1.ogg", Sound.class));

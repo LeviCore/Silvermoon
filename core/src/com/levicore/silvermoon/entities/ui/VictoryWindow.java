@@ -45,9 +45,6 @@ public class VictoryWindow {
     public float insetY = 45;
     public float intervalX = 45;
 
-    private float fontWidth;
-    private float fontHeight;
-
     public VictoryWindow(State battleState, List<Character> characters, List<Item> items) {
         this.battleState = battleState;
         phase = PHASE.UNSTARTED;

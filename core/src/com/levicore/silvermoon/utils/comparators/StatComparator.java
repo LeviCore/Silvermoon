@@ -23,9 +23,9 @@ public class StatComparator implements Comparator<BattleEntity> {
     public int compare(BattleEntity o1, BattleEntity o2) {
         switch (attribute) {
             case SPEED :
-                return (int) (o2.speed - o1.speed);
+                return (int) (o2.getSpeed() - o1.getSpeed());
             case HP :
-                return (int) (o2.curHP - o1.curHP);
+                return (int) (o2.getCurHP() - o1.getCurHP());
         }
 
         return 0;

@@ -7,19 +7,21 @@ import aurelienribon.tweenengine.TweenCallback;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.PooledLinkedList;
 import com.levicore.silvermoon.*;
 import com.levicore.silvermoon.Character;
 import com.levicore.silvermoon.battle.Behavior;
 import com.levicore.silvermoon.battle.Buff;
 import com.levicore.silvermoon.battle.Skill;
+import com.levicore.silvermoon.core.Equipment;
 import com.levicore.silvermoon.core.Item;
 import com.levicore.silvermoon.entities.Entity;
 import com.levicore.silvermoon.entities.battle.BattleEntity;
+import com.levicore.silvermoon.entities.battle.KadukiBattler;
 import com.levicore.silvermoon.entities.ui.*;
 import com.levicore.silvermoon.utils.comparators.StatComparator;
 import com.levicore.silvermoon.utils.map.MapState;
 import com.levicore.silvermoon.utils.tween.EntityAccessor;
+import com.sun.istack.internal.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -76,6 +78,7 @@ public class BattleState extends State {
     protected List<Character> characters;
     protected List<BattleEntity> enemies;
     protected List<Item> itemDrops;
+
     private boolean done;
 
     public BattleState(GSM gsm, MapState mapState, Music music, PHASE phase, List<Character> characters, List<BattleEntity> enemies) {
@@ -90,6 +93,7 @@ public class BattleState extends State {
 
         // TODO : move in a Timline method if necessary to be overridden for custom cutscenes.
         Timeline.createSequence()
+                .push(fadeInBattlers(1))
                 .push(SoundManager.playBackgroundMusic(music, 1, true))
                 .start(tweenManager);
 
@@ -100,17 +104,24 @@ public class BattleState extends State {
         // Set item drops
         itemDrops = new ArrayList<>();
         for(BattleEntity enemy : enemies) {
-            itemDrops.addAll(enemy.itemDrops);
+            itemDrops.addAll(enemy.getItemDrops());
         }
-
-        // Init victory window
-        victoryWindow = new VictoryWindow(this, characters, itemDrops);
 
         // Set first 4 as active battlers, TODO position them.
         float x = -Silvermoon.SCREEN_WIDTH / 3;
         float xSkew = 0;
 
         float y = 0;
+
+        for (int i1 = 0; i1 < characters.size(); i1++) {
+            Character character = characters.get(i1);
+
+            if (character.getBattleEntity().getCurHP() <= 0) {
+                characters.remove(character);
+            }
+        }
+
+        victoryWindow = new VictoryWindow(this, characters, itemDrops);
 
         for (int i = 0; i < 4; i++) {
             if(i <= characters.size() - 1) {
@@ -131,6 +142,11 @@ public class BattleState extends State {
         y = 0;
 
         for(BattleEntity battleEntity : enemies) {
+
+            for(Behavior behavior : battleEntity.getBehaviors()) {
+                behavior.setBattleState(this);
+            }
+
             battleEntity.setPosition(x + xSkew, y);
             y -= battleEntity.getHeight() + 15;
             xSkew += 15;
@@ -215,8 +231,9 @@ public class BattleState extends State {
         partyA = new ArrayList<>();
         battlers = new ArrayList<>();
         circularMenu = new CircularMenu();
-        db = new DialogBox(new Texture("data/images/dialog-box.9.png"));
+        db = new DialogBox(Assets.SYSTEM_ATLAS.findRegion("Skill_Info_Background"));
         skillInfoBar = new SkillInfoBar();
+
         background = new Entity("data/battlebacks/back_1.png");
         selector_1 = new Entity(Assets.SYSTEM_ATLAS.findRegion("Selector", 1));
         selector_2 = new Entity(Assets.SYSTEM_ATLAS.findRegion("Selector", 2));
@@ -243,20 +260,20 @@ public class BattleState extends State {
     private void handleActionSelectionTouchUp() {
         if(circularMenu.basicActions[0].contains(worldCoordinates.x, worldCoordinates.y)) {
             /** Skill 0, default is Attack */
-            if(skillSelected == getActiveBattler().skills.get(0)) {
+            if(skillSelected == getActiveBattler().getSkills().get(0)) {
                 processSkill();
             } else {
                 circularMenu.transitionOutExtendedOptions(0.25f).start(tweenManager);
-                setSkillSelected(getActiveBattler().skills.get(0), circularMenu.basicActions[0]);
+                setSkillSelected(getActiveBattler().getSkills().get(0), circularMenu.basicActions[0]);
             }
 
         } else if(circularMenu.basicActions[2].contains(worldCoordinates.x, worldCoordinates.y)) {
             /** Skill 1, default is Defend */
-            if(skillSelected == getActiveBattler().skills.get(1)) {
+            if(skillSelected == getActiveBattler().getSkills().get(1)) {
                 processSkill();
             } else {
                 circularMenu.transitionOutExtendedOptions(0.25f).start(tweenManager);
-                setSkillSelected(getActiveBattler().skills.get(1), circularMenu.basicActions[2]);
+                setSkillSelected(getActiveBattler().getSkills().get(1), circularMenu.basicActions[2]);
             }
         }
 
@@ -324,17 +341,24 @@ public class BattleState extends State {
         if(getWinner() == null) {
             switch (phase) {
                 case TURN_START:
-                    fadeInHealthBars(1)
-                    .push(circularMenu.resetScale(1))
-                    .start(tweenManager);
-
-                    if (!getActiveBattler().behaviors.isEmpty()) {
-                        executeAI();
-                    } else {
-                        phase = PHASE.ACTION_SELECTION;
+                    if(getActiveBattler().getCurHP() <= 0) {
+                        phase = PHASE.TURN_END;
                         execute();
-                    }
+                    } else {
 
+                        executeBuffEffect().start(tweenManager);
+
+                        fadeInHealthBars(1)
+                                .push(circularMenu.resetScale(1))
+                                .start(tweenManager);
+
+                        if (!getActiveBattler().getBehaviors().isEmpty()) {
+                            executeAI();
+                        } else {
+                            phase = PHASE.ACTION_SELECTION;
+                            execute();
+                        }
+                    }
                     break;
                 case ACTION_SELECTION:
                     executeActionSelection(getActiveBattler());
@@ -356,7 +380,6 @@ public class BattleState extends State {
                             .push(skillSelected.execute(this, getActiveBattler(), targetsSelected))
                             .push(skillInfoBar.fadeOut(0.5f))
                             .push(setPhase(PHASE.TURN_END))
-                            .pushPause(1)
                             .setCallback(new TweenCallback() {
                                 @Override
                                 public void onEvent(int type, BaseTween<?> source) {
@@ -370,14 +393,23 @@ public class BattleState extends State {
                     resetSkillsOnCircularMenu();
                     resetSkillsAndTargets();
 
+                    for (int i = 0; i < battlers.size(); i++) {
+                        BattleEntity battleEntity = battlers.get(i);
+                        if (battleEntity.getCurHP() <= 0) {
+                            battlers.remove(battleEntity);
+                            getParty(battleEntity).remove(battleEntity);
+                            active--;
+                        }
+                    }
+
                     if (active == battlers.size() - 1) {
                         active = 0;
                     } else {
-                        executeBuffEffect().start(tweenManager);
                         active++;
                     }
 
                     phase = PHASE.TURN_START;
+
                     execute();
                     break;
 
@@ -427,7 +459,7 @@ public class BattleState extends State {
         // TODO HOTFIX
         for (int i = 0; i < availableTargets.size(); i++) {
             BattleEntity battleEntity = availableTargets.get(i);
-            if (battleEntity.curHP < 1) availableTargets.remove(battleEntity);
+            if (battleEntity.getCurHP() < 1) availableTargets.remove(battleEntity);
         }
     }
 
@@ -455,7 +487,7 @@ public class BattleState extends State {
      * AI
      */
     public void executeAI() {
-        List<Behavior> behaviors = getActiveBattler().behaviors;
+        List<Behavior> behaviors = getActiveBattler().getBehaviors();
         for (int i = behaviors.size() - 1; i >= 0; i--) {
             Behavior behavior = behaviors.get(i);
             skillSelected = behavior.selectSkill();
@@ -529,12 +561,12 @@ public class BattleState extends State {
      */
     public Timeline executeBuffEffect() {
         Timeline timeline = Timeline.createSequence();
-        for (Buff buff : getActiveBattler().buffs) {
+        for (Buff buff : getActiveBattler().getBuffs()) {
             timeline.push(buff.executeTurnEffect(getActiveBattler()));
             buff.duration--;
 
             if(buff.duration == 0) {
-                getActiveBattler().buffs.remove(buff);
+                getActiveBattler().getBuffs().remove(buff);
             }
         }
         return timeline;
@@ -546,11 +578,11 @@ public class BattleState extends State {
     public void initSkillsOnCircularMenu() {
         int i = 2;
         for(SkillOption skillOption : circularMenu.options) {
-            if(i >= battlers.get(active).skills.size()) {
+            if(i >= battlers.get(active).getSkills().size()) {
                 break;
             }
 
-            skillOption.setSkill(battlers.get(active).skills.get(i));
+            skillOption.setSkill(battlers.get(active).getSkills().get(i));
             i++;
         }
     }
@@ -617,21 +649,43 @@ public class BattleState extends State {
 
                 switch (attribute) {
                     case HP:
-                        finalValue = target.curHP + value;
+                        finalValue = target.getCurHP() + value;
 
-                        if(target.curHP > target.maxHP) {
-                            finalValue = target.maxHP;
+                        if(target.getCurHP() > target.getMaxHP()) {
+                            finalValue = target.getMaxHP();
                         }
 
                         tweenManager.killTarget(target, EntityAccessor.HP);
                         timeline_1.push(target.setHP(finalValue, 0.25f));
 
+                        if (finalValue < 1) {
+                            target.setAnimation(target.getDeadPose()).start(tweenManager);
+
+                            Timeline.createSequence()
+                                    .push(target.fadeOutBars(1)
+                                    .push(target.fadeOut(1)))
+                                    .start(tweenManager);
+
+                        } else {
+
+                            Timeline timeline = Timeline.createSequence();
+
+                            float origX = target.getX();
+
+                            timeline.push(target.setAnimation(target.getHurtPose()));
+                            timeline.push(target.moveTo(target.getX() + (10 * -getSideFacing(target)), target.getY(), 0.15f));
+                            timeline.push(target.setAnimation(target.getWalkingPose()));
+                            timeline.push(target.moveTo(origX, target.getY(), 0.30f));
+                            timeline.push(target.setAnimation(target.getIdlePose()));
+                            timeline.start(tweenManager);
+                        }
+
                         break;
                     case MP:
-                        finalValue = target.curMP + value;
+                        finalValue = target.getCurMP() + value;
 
-                        if( target.curMP > target.maxMP) {
-                            finalValue = target.maxMP;
+                        if( target.getCurMP() > target.getMaxMP()) {
+                            finalValue = target.getMaxMP();
                         }
 
                         tweenManager.killTarget(target, EntityAccessor.MP);
@@ -639,10 +693,10 @@ public class BattleState extends State {
 
                         break;
                     case TP:
-                        finalValue = target.curTP + value;
+                        finalValue = target.getCurTP() + value;
 
-                        if(target.curTP > target.maxTP) {
-                            finalValue = target.maxTP;
+                        if(target.getCurTP() > target.getMaxTP()) {
+                            finalValue = target.getMaxTP();
                         }
 
                         tweenManager.killTarget(target, EntityAccessor.TP);
@@ -651,32 +705,8 @@ public class BattleState extends State {
                         break;
                 }
 
-
                 timeline_1.push(target.fadeOutBars(0.25f));
                 timeline_1.start(tweenManager);
-
-                if (finalValue < 1) {
-                    target.setAnimation(target.DEAD).start(tweenManager);
-
-                    Timeline.createSequence()
-                            .push(target.fadeOutBars(1)
-                            .push(target.fadeOut(1)))
-                            .push(removeFromBattle(target))
-                            .start(tweenManager);
-
-                } else {
-
-                    Timeline timeline = Timeline.createSequence();
-
-                    float origX = target.getX();
-
-                    timeline.push(target.setAnimation(target.HURT));
-                    timeline.push(target.moveTo(target.getX() + (10 * -getSideFacing(target)), target.getY(), 0.15f));
-                    timeline.push(target.setAnimation(target.WALKING));
-                    timeline.push(target.moveTo(origX, target.getY(), 0.30f));
-                    timeline.push(target.setAnimation(target.IDLE));
-                    timeline.start(tweenManager);
-                }
 
             }
         });
@@ -686,33 +716,35 @@ public class BattleState extends State {
     /**
      * Battle action timelines
      */
-    public Timeline normalWeaponSwing(BattleEntity battleEntity, BattleEntity target, final Entity icon) {
+    public Timeline normalWeaponSwing(BattleEntity battleEntity, @Nullable final Entity icon) {
         // TODO HOTFIX : fix allowance for side b
+
+        final Entity iconUsed = icon != null ? icon : battleEntity.getEquipment(Equipment.EQUIPMENT_TYPE.WEAPON_SLOT) != null ? battleEntity.getEquipment(Equipment.EQUIPMENT_TYPE.WEAPON_SLOT).getIcon() : null;
 
         Timeline timeline = Timeline.createSequence();
 
-        if(icon != null) {
-            temporaryEntities.add(icon);
+        if(iconUsed != null) {
+            temporaryEntities.add(iconUsed);
 
             int allowance = getSideFacing(battleEntity) == -1 ? 6 : 0;
 
-            icon.setOrigin(32, 0);
-            icon.setVisible(false);
+            iconUsed.setOrigin(32, 0);
+            iconUsed.setVisible(false);
 
-            timeline.push(icon.moveTo(targetsSelected.get(0).getX() - (targetsSelected.get(0).getWidth() * getSideFacing(battleEntity)) + ((-battleEntity.getWidth()) / 2) + allowance, targetsSelected.get(0).getY() + allowance + 4, 0))
+            timeline.push(iconUsed.moveTo(targetsSelected.get(0).getX() - (targetsSelected.get(0).getWidth() * getSideFacing(battleEntity)) + ((-battleEntity.getWidth()) / 2) + allowance, targetsSelected.get(0).getY() + allowance + 4, 0))
             .push(Tween.call(new TweenCallback() {
                 @Override
                 public void onEvent(int type, BaseTween<?> source) {
-                    icon.setVisible(true);
+                    iconUsed.setVisible(true);
                 }
             }))
-            .push(icon.rotateTo(-45, 0))
-            .push(icon.rotateTo(getSideFacing(battleEntity) == -1 ? 45 : -135, 0.09f * 3))
+            .push(iconUsed.rotateTo(-45, 0))
+            .push(iconUsed.rotateTo(getSideFacing(battleEntity) == -1 ? 45 : -135, 0.09f * 3))
             .push(Tween.call(new TweenCallback() {
                 @Override
                 public void onEvent(int type, BaseTween<?> source) {
-                    icon.setVisible(false);
-                    temporaryEntities.remove(icon);
+                    iconUsed.setVisible(false);
+                    temporaryEntities.remove(iconUsed);
                 }
             }));
 
@@ -729,7 +761,7 @@ public class BattleState extends State {
     }
 
     public int skillCount() {
-        return getActiveBattler().skills.size();
+        return getActiveBattler().getSkills().size();
     }
 
     public void processSkill() {
@@ -771,13 +803,13 @@ public class BattleState extends State {
     public void drawBattlerNames(SpriteBatch batch) {
         if(phase == PHASE.ACTION_SELECTION || phase == PHASE.TARGET_SELECTION) {
             for (BattleEntity battleEntity : battlers) {
-                float textWidth = battleEntity.getBitmapFont() == null ? gsm.getBitmapFont().getWrappedBounds(battleEntity.name, 200).width : battleEntity.getBitmapFont().getWrappedBounds(battleEntity.name, 200).width;
-                float textHeight = battleEntity.getBitmapFont() == null ? gsm.getBitmapFont().getWrappedBounds(battleEntity.name, 200).height : battleEntity.getBitmapFont().getWrappedBounds(battleEntity.name, 200).height;
+                float textWidth = battleEntity.getBitmapFont() == null ? gsm.getBitmapFont().getWrappedBounds(battleEntity.getName(), 200).width : battleEntity.getBitmapFont().getWrappedBounds(battleEntity.getName(), 200).width;
+                float textHeight = battleEntity.getBitmapFont() == null ? gsm.getBitmapFont().getWrappedBounds(battleEntity.getName(), 200).height : battleEntity.getBitmapFont().getWrappedBounds(battleEntity.getName(), 200).height;
 
                 if (battleEntity.getBitmapFont() != null) {
-                    battleEntity.getBitmapFont().drawWrapped(batch, battleEntity.name, battleEntity.getX() + (battleEntity.getWidth() / 2) - (textWidth / 2), battleEntity.getY() + battleEntity.getHeight() + textHeight, 200);
+                    battleEntity.getBitmapFont().drawWrapped(batch, battleEntity.getName(), battleEntity.getX() + (battleEntity.getWidth() / 2) - (textWidth / 2), battleEntity.getY() + battleEntity.getHeight() + textHeight, 200);
                 } else {
-                    gsm.getBitmapFont().drawWrapped(batch, battleEntity.name, battleEntity.getX() + (battleEntity.getWidth() / 2) - (textWidth / 2), battleEntity.getY() + battleEntity.getHeight() + textHeight, 200);
+                    gsm.getBitmapFont().drawWrapped(batch, battleEntity.getName(), battleEntity.getX() + (battleEntity.getWidth() / 2) - (textWidth / 2), battleEntity.getY() + battleEntity.getHeight() + textHeight, 200);
                 }
             }
         }
@@ -792,7 +824,7 @@ public class BattleState extends State {
     }
 
     public List<BattleEntity> getParty(BattleEntity caster) {
-        if(partyA.contains(caster)) {
+        if(!partyA.isEmpty() && partyA.contains(caster)) {
             return partyA;
         } else {
             return partyB;
@@ -815,16 +847,6 @@ public class BattleState extends State {
         }
 
         return null;
-    }
-
-    public Tween removeFromBattle(final BattleEntity target) {
-        return Tween.call(new TweenCallback() {
-            @Override
-            public void onEvent(int type, BaseTween<?> source) {
-                getParty(target).remove(target);
-                battlers.remove(target);
-            }
-        });
     }
 
     /**

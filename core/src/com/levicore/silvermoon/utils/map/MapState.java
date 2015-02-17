@@ -108,7 +108,7 @@ public class MapState extends State {
 
         mapAlpha = 1;
 
-        arrow_buttons = new Entity("Arrow_Buttons.png");
+        arrow_buttons = new Entity("data/Arrow_Buttons.png");
         arrow_buttons.setPosition(-Silvermoon.SCREEN_WIDTH / 2 + 50, -Silvermoon.SCREEN_HEIGHT / 2 + 50);
         buttonA = new Entity("data/buttonA.png");
         buttonA.setPosition(Silvermoon.SCREEN_WIDTH / 2 - 200, -Silvermoon.SCREEN_HEIGHT / 2 + 50);
@@ -119,7 +119,7 @@ public class MapState extends State {
         down = new Rectangle(arrow_buttons.getX() + 50, arrow_buttons.getY() + 0, 60, 50);
         left = new Rectangle(arrow_buttons.getX() + 0, arrow_buttons.getY() + 50, 50, 60);
         right = new Rectangle(arrow_buttons.getX() + 110, arrow_buttons.getY() + 50, 50, 60);
-        dialogBox = new DialogBox(Assets.getTexture("splash"));
+        dialogBox = new DialogBox(Assets.SYSTEM_ATLAS.findRegion("Skill_Info_Background"));
 
         super.initialize();
     }

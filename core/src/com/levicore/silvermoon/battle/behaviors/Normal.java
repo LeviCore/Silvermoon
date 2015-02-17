@@ -18,7 +18,7 @@ public class Normal extends Behavior {
     @Override
     public Skill selectSkill() {
 
-        for(Skill skill : battleEntity.skills) {
+        for(Skill skill : battleEntity.getSkills()) {
             if(skill.getSkillType() == Skill.SKILL_TYPE.HEAL) {
                 healSkills.add(skill);
             }
@@ -30,7 +30,7 @@ public class Normal extends Behavior {
             }
         }
 
-        return battleEntity.skills.get(0);
+        return battleEntity.getSkills().get(0);
     }
 
     @Override

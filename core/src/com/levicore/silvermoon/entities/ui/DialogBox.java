@@ -5,10 +5,7 @@ import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenCallback;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.NinePatch;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.levicore.silvermoon.entities.Entity;
 
 /**
@@ -40,6 +37,23 @@ public class DialogBox extends Entity {
         visible = false;
 
         patch = new NinePatch(texture, 8, 8, 8, 5);
+        patch.setColor(Color.RED);
+
+        textWrapWidth = 100;
+        textInsetX = 5;
+        textInsetY = -3;
+        textInsetBottomX = 10;
+        textInsetBottomY = 10;
+    }
+
+    public DialogBox(TextureRegion region) {
+        super(region);
+
+        text = "";
+        bitmapFont = new BitmapFont();
+        visible = false;
+
+        patch = new NinePatch(region, 8, 8, 8, 5);
         patch.setColor(Color.RED);
 
         textWrapWidth = 100;

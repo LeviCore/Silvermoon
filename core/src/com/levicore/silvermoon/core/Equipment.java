@@ -9,24 +9,24 @@ import com.levicore.silvermoon.entities.battle.BattleEntity;
 public abstract class Equipment extends Item {
 
     // TODO FINISH THIS
-    private BattleEntity battleEntity;
+    protected BattleEntity user;
     private EQUIPMENT_TYPE equipment_type;
 
-    public Equipment(BattleEntity battleEntity, EQUIPMENT_TYPE equipment_type, Entity icon, String name, String description) {
+    /**
+     * Constructor with 0 cost as default
+     */
+    public Equipment(Entity icon, String name, String description, BattleEntity user, EQUIPMENT_TYPE equipment_type) {
         super(icon, name, description);
-        this.battleEntity = battleEntity;
+        this.user = user;
         this.equipment_type = equipment_type;
     }
 
-    public Equipment(Entity icon, String name, String description, BattleEntity battleEntity, EQUIPMENT_TYPE equipment_type) {
-        super(icon, name, description);
-        this.battleEntity = battleEntity;
-        this.equipment_type = equipment_type;
-    }
-
-    public Equipment(Entity icon, String name, String description, int cost, BattleEntity battleEntity, EQUIPMENT_TYPE equipment_type) {
+    /**
+     * Constructor with cost
+     */
+    public Equipment(Entity icon, String name, String description, int cost, BattleEntity user, EQUIPMENT_TYPE equipment_type) {
         super(icon, name, description, cost);
-        this.battleEntity = battleEntity;
+        this.user = user;
         this.equipment_type = equipment_type;
     }
 
@@ -38,7 +38,7 @@ public abstract class Equipment extends Item {
     }
 
     public static enum EQUIPMENT_TYPE {
-        SWORD_SLOT, SHIELD_SLOT, BODY_SLOT, HEAD_SLOT, GLOVES_SLOT, BOOTS_SLOT,
+        WEAPON_SLOT, SHIELD_SLOT, BODY_SLOT, HEAD_SLOT, GLOVES_SLOT, BOOTS_SLOT,
     }
 
 }

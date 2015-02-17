@@ -1,5 +1,6 @@
 package com.levicore.silvermoon.presets.monsters;
 
+import com.levicore.silvermoon.battle.behaviors.Normal;
 import com.levicore.silvermoon.entities.battle.KadukiBattler;
 
 /**
@@ -8,21 +9,8 @@ import com.levicore.silvermoon.entities.battle.KadukiBattler;
 public class Monsters_A {
 
     public static KadukiBattler createDummy() {
-        KadukiBattler kadukiBattler = new KadukiBattler("$Actor63", 0, 0, 32, 32);
-        kadukiBattler.flipBattler_void(false, false);
-
-        kadukiBattler.name = "Dummy";
-
-        kadukiBattler.maxHP = 1;
-        kadukiBattler.curHP = 1;
-
-        kadukiBattler.maxMP = 1;
-        kadukiBattler.curMP = 1;
-
-        kadukiBattler.maxMP = 1;
-        kadukiBattler.curTP = 1;
-        
-        kadukiBattler.speed = 1;
+        KadukiBattler kadukiBattler = new KadukiBattler("Dummy", "$Actor63", 32, 32, 1, 1, 1, 1, 1, 1, 1, 1, false, false);
+        kadukiBattler.getBehaviors().add(new Normal(null, kadukiBattler));
 
         return kadukiBattler;
     }

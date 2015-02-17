@@ -31,7 +31,7 @@ public abstract class Behavior {
     public abstract void setTargets();
 
     public void storeSkills() {
-        for(Skill skill : battleEntity.skills) {
+        for(Skill skill : battleEntity.getSkills()) {
             switch (skill.getSkillType()) {
                 case NORMAL:
                     normalSkills.add(skill);
@@ -71,4 +71,7 @@ public abstract class Behavior {
         return battleState.getAvailableTargets().get(battleState.getAvailableTargets().size() - 1);
     }
 
+    public void setBattleState(BattleState battleState) {
+        this.battleState = battleState;
+    }
 }

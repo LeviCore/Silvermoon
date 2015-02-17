@@ -1,6 +1,7 @@
 package com.levicore.silvermoon.battle.skills;
 
 import aurelienribon.tweenengine.Timeline;
+import com.levicore.silvermoon.Assets;
 import com.levicore.silvermoon.battle.Skill;
 import com.levicore.silvermoon.entities.battle.BattleEntity;
 import com.levicore.silvermoon.entities.Entity;
@@ -16,7 +17,7 @@ public class Defend extends Skill {
     @Override
     public Timeline execute(BattleState battleState, BattleEntity caster, List<BattleEntity> targets) {
         Timeline timeline = Timeline.createSequence();
-        timeline.push(caster.setAnimation(caster.DEFEND));
+        timeline.push(caster.setAnimation(caster.getDefendPose()));
         timeline.pushPause(1);
 
         return timeline;
@@ -64,7 +65,7 @@ public class Defend extends Skill {
 
     @Override
     public Entity getIcon() {
-        return new Entity("data/images/icons/shield_1.png");
+        return new Entity(Assets.ICONS_ATLAS.findRegion("shield"));
     }
 
 }

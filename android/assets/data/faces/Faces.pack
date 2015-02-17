@@ -1,18 +1,25 @@
 
-Face.png
+Faces.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-$Actor63_Normal
+$Actor28_Normal
   rotate: false
   xy: 1, 1
   size: 96, 96
   orig: 96, 96
   offset: 0, 0
   index: -1
-$Actor63_Serious
+$Actor63_Normal
   rotate: false
   xy: 99, 1
+  size: 96, 96
+  orig: 96, 96
+  offset: 0, 0
+  index: -1
+$Actor63_Serious
+  rotate: false
+  xy: 197, 1
   size: 96, 96
   orig: 96, 96
   offset: 0, 0

@@ -33,7 +33,7 @@ public abstract class Skill {
     }
 
     public boolean canBeCasted(BattleEntity battleEntity) {
-        if(isCooldown() && battleEntity.curHP > getHpCost() &&  battleEntity.curMP > getMpCost() &&  battleEntity.curTP > getTpCost()) {
+        if(isCooldown() && battleEntity.getCurHP() > getHpCost() &&  battleEntity.getCurMP() > getMpCost() &&  battleEntity.getCurTP() > getTpCost()) {
             return true;
         }
 

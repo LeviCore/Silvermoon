@@ -1,5 +1,6 @@
 package com.levicore.silvermoon.entities.ui;
 
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.levicore.silvermoon.*;
@@ -27,6 +28,7 @@ public class CharacterInfo extends Entity {
         this.character = character;
         this.background = background;
 
+
         setSize(96, 96);
         setPosition(x, y);
 
@@ -34,7 +36,7 @@ public class CharacterInfo extends Entity {
         expBar.setMaxWidth(96);
         expBar.setPosition(getX(), getY() - expBar.getHeight() - 5);
 
-        characterName = new TextEntity(null, character.getName(), null, 0, expBar.getY() - 5, getWidth());
+        characterName = new TextEntity(null, character.getBattleEntity().getName(), null, 0, expBar.getY() - 5, getWidth());
         characterName.setX(getX() - (characterName.getWidth() / 2) + (getWidth() / 2));
     }
 

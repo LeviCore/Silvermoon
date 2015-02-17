@@ -1,6 +1,7 @@
 package com.levicore.silvermoon.battle.skills;
 
 import aurelienribon.tweenengine.Timeline;
+import com.levicore.silvermoon.Assets;
 import com.levicore.silvermoon.battle.Skill;
 import com.levicore.silvermoon.entities.Entity;
 import com.levicore.silvermoon.entities.battle.BattleEntity;
@@ -26,22 +27,22 @@ public class Attack extends Skill {
             int side = battleState.getSideFacing(caster);
 
             Timeline timeline = Timeline.createSequence();
-            timeline.push(kadukiCaster.setAnimation(kadukiCaster.WALKING));
+            timeline.push(kadukiCaster.setAnimation(kadukiCaster.getWalkingPose()));
             timeline.push(kadukiCaster.moveTo(targets.get(0).getX() - (targets.get(0).getWidth() * side), targets.get(0).getY(), 1));
 
             timeline.push(
                     Timeline.createParallel()
                             .push(Timeline.createSequence()
-                                            .push(kadukiCaster.setAnimation(kadukiCaster.MELEE_ATTACK))
+                                            .push(kadukiCaster.setAnimation(kadukiCaster.getMeleeAttackPose()))
                                             .pushPause(0.09f * 3)
-                                            .push(battleState.setAttribute(BattleEntity.Attribute.HP, targets.get(0), -50))
+                                            .push(battleState.setAttribute(BattleEntity.Attribute.HP, targets.get(0), -100))
                             )
-                            .push(battleState.normalWeaponSwing(caster, targets.get(0), caster.getWeapon()))
+                            .push(battleState.normalWeaponSwing(caster, null))
             );
             timeline.push(AnimationTimelines.SLASH(battleState, targets.get(0), targets.get(0).getX(), targets.get(0).getY()));
-            timeline.push(kadukiCaster.setAnimation(kadukiCaster.WALKING));
+            timeline.push(kadukiCaster.setAnimation(kadukiCaster.getWalkingPose()));
             timeline.push(kadukiCaster.moveTo(originalX, originalY, 1));
-            timeline.push(kadukiCaster.setAnimation(kadukiCaster.IDLE));
+            timeline.push(kadukiCaster.setAnimation(kadukiCaster.getIdlePose()));
 
             return timeline;
         }
@@ -92,7 +93,7 @@ public class Attack extends Skill {
 
     @Override
     public Entity getIcon() {
-        return new Entity("data/images/icons/skill_book.png");
+        return new Entity(Assets.ICONS_ATLAS.findRegion("skill_book"));
     }
 
 

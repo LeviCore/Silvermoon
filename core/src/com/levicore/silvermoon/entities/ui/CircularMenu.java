@@ -3,6 +3,7 @@ package com.levicore.silvermoon.entities.ui;
 import aurelienribon.tweenengine.Timeline;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.levicore.silvermoon.Assets;
 import com.levicore.silvermoon.entities.Entity;
 
 /**
@@ -28,9 +29,9 @@ public class CircularMenu {
             basicActions[i] = new Option(textureAtlas.findRegion("IconSlotSmallCircle"), null);
         }
 
-        basicActions[0].setIcon(new Entity("data/images/icons/sword_1.png"));
-        basicActions[1].setIcon(new Entity("data/images/icons/skill_book.png"));
-        basicActions[2].setIcon(new Entity("data/images/icons/shield_1.png"));
+        basicActions[0].setIcon(new Entity(Assets.ICONS_ATLAS.findRegion("sword")));
+        basicActions[1].setIcon(new Entity(Assets.ICONS_ATLAS.findRegion("skill_book")));
+        basicActions[2].setIcon(new Entity(Assets.ICONS_ATLAS.findRegion("shield")));
 
         for (int i = 0; i < options.length; i++) {
             options[i] = new SkillOption(textureAtlas.findRegion("IconSlotSmallCircle"), null);

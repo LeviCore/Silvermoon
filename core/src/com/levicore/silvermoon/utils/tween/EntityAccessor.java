@@ -33,13 +33,13 @@ public class EntityAccessor implements TweenAccessor<Entity> {
                 return 1;
 
             case HP :
-                returnValues[0] = ((BattleEntity) target).curHP;
+                returnValues[0] = ((BattleEntity) target).getCurHP();
                 return 1;
             case MP :
-                returnValues[0] = ((BattleEntity) target).curMP;
+                returnValues[0] = ((BattleEntity) target).getCurMP();
                 return 1;
             case TP :
-                returnValues[0] = ((BattleEntity) target).curTP;
+                returnValues[0] = ((BattleEntity) target).getCurTP();
                 return 1;
 
 
@@ -66,13 +66,13 @@ public class EntityAccessor implements TweenAccessor<Entity> {
                 break;
 
             case HP :
-                ((BattleEntity) target).curHP = newValues[0];
+                ((BattleEntity) target).setCurHP(newValues[0]);
                 break;
             case MP :
-                ((BattleEntity) target).curMP = newValues[0];
+                ((BattleEntity) target).setCurMP(newValues[0]);
                 break;
             case TP :
-                ((BattleEntity) target).curTP = newValues[0];
+                ((BattleEntity) target).setCurTP(newValues[0]);
                 break;
 
             default :

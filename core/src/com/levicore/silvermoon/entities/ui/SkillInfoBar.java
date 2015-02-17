@@ -9,7 +9,7 @@ import com.levicore.silvermoon.entities.Entity;
 public class SkillInfoBar extends InfoBar {
 
     public SkillInfoBar() {
-        super(Assets.SYSTEM_ATLAS.findRegion("Skill_Info_Background"), new Entity("data/images/icons/skill_book.png"));
+        super(Assets.SYSTEM_ATLAS.findRegion("Skill_Info_Background"), new Entity(Assets.ICONS_ATLAS.findRegion("skill_book")));
     }
 
 }

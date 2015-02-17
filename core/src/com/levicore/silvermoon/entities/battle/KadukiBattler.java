@@ -14,15 +14,23 @@ import com.levicore.silvermoon.utils.AnimationUtils;
 public class KadukiBattler extends BattleEntity {
 
     private TextureRegion[][] char_1, char_2, char_3;
-    private float x, y;
 
-    public KadukiBattler(String charsetName, float x, float y, int regionWidth, int regionHeight) {
-        super();
+    /**
+     * Constructor with default stat values as 1
+     */
+    public KadukiBattler(String name, String charsetName, int regionWidth, int regionHeight, boolean flipX, boolean flipY) {
+        super(name, 1, 1, 1, 1, 1, 1, 1, 1);
+        createKadukiBattler(charsetName, regionWidth, regionHeight);
+        flipBattler_void(flipX, flipY);
+    }
 
-        setPosition(x, y);
-        this.x = x;
-        this.y = y;
+    public KadukiBattler(String name, String charsetName, int regionWidth, int regionHeight, float maxHP, float maxMP, float maxTP, float atk, float def, float mAtk, float mDef, float speed, boolean flipX, boolean flipY) {
+        super(name, maxHP, maxMP, maxTP, atk, def, mAtk, mDef, speed);
+        createKadukiBattler(charsetName, regionWidth, regionHeight);
+        flipBattler_void(flipX, flipY);
+    }
 
+    public void createKadukiBattler(String charsetName, int regionWidth, int regionHeight) {
         char_1 = split(new Texture("data/characters/"+charsetName+"_1.png"), regionWidth, regionHeight);
         char_2 = split(new Texture("data/characters/"+charsetName+"_2.png"), regionWidth, regionHeight);
         char_3 = split(new Texture("data/characters/"+charsetName+"_3.png"), regionWidth, regionHeight);

@@ -1,13 +1,9 @@
 package com.levicore.silvermoon.states.chapter1;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Rectangle;
 import com.levicore.silvermoon.Assets;
 import com.levicore.silvermoon.GSM;
 import com.levicore.silvermoon.entities.MapEntity;
-import com.levicore.silvermoon.entities.battle.KadukiBattler;
-import com.levicore.silvermoon.presets.mapEntities.MainCharacterMapEntities;
 import com.levicore.silvermoon.presets.parties.Enemies_1;
 import com.levicore.silvermoon.states.BattleState;
 import com.levicore.silvermoon.utils.map.MapState;
