@@ -1,7 +1,9 @@
 package com.levicore.silvermoon.entities.battle;
 
+import aurelienribon.tweenengine.BaseTween;
 import aurelienribon.tweenengine.Timeline;
 import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenCallback;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -17,6 +19,7 @@ import com.levicore.silvermoon.core.Equipment;
 import com.levicore.silvermoon.core.Item;
 import com.levicore.silvermoon.entities.Entity;
 import com.levicore.silvermoon.entities.ui.PercentageBar;
+import com.levicore.silvermoon.utils.AnimationUtils;
 import com.levicore.silvermoon.utils.tween.EntityAccessor;
 
 import java.util.ArrayList;
@@ -37,6 +40,9 @@ public class BattleEntity extends Entity {
 
     protected List<Equipment.EQUIPMENT_TYPE> equipmentsAvailable;
     protected Map<Equipment.EQUIPMENT_TYPE, Equipment> equipments;
+
+    // for kaduki battler
+    protected TextureRegion[][] char_1, char_2, char_3;
 
     protected float maxHP;
     protected float maxMP;
@@ -77,12 +83,16 @@ public class BattleEntity extends Entity {
 
     protected BitmapFont bitmapFont;
 
+    protected int level;
 
+    // default exp reward is 50
+    protected float expReward;
 
-    protected BattleEntity(String name, float maxHP, float maxMP, float maxTP, float atk, float def, float mAtk, float mDef, float speed) {
+    public BattleEntity(String name, int level, float maxHP, float maxMP, float maxTP, float atk, float def, float mAtk, float mDef, float speed) {
         super();
 
         this.name = name;
+        this.level = level;
 
         this.maxHP = maxHP;
         curHP = maxHP;
@@ -102,10 +112,55 @@ public class BattleEntity extends Entity {
         init();
     }
 
-    public BattleEntity(String name, Animation animation, float maxHP, float maxMP, float maxTP, float atk, float def, float mAtk, float mDef, float speed) {
+    /**
+     * Constructor for kaduki battler
+     *
+     * @param charsetName
+     * @param flipX
+     * @param flipY
+     * @param regionWidth
+     * @param regionHeight
+     * @param name
+     * @param maxHP
+     * @param maxMP
+     * @param maxTP
+     * @param atk
+     * @param def
+     * @param mAtk
+     * @param mDef
+     * @param speed
+     */
+    public BattleEntity(String charsetName, int level, boolean flipX, boolean flipY, int regionWidth, int regionHeight, String name, float maxHP, float maxMP, float maxTP, float atk, float def, float mAtk, float mDef, float speed) {
+        super();
+
+        this.name = name;
+        this.level = level;
+
+        this.maxHP = maxHP;
+        curHP = maxHP;
+
+        this.maxMP = maxMP;
+        curMP = maxMP;
+
+        this.maxTP = maxTP;
+        curTP = maxTP;
+
+        this.atk = atk;
+        this.def = def;
+        this.mAtk = mAtk;
+        this.mDef = mDef;
+        this.speed = speed;
+
+        init();
+
+        createKadukiBattler(charsetName, flipX, flipY, regionWidth, regionHeight);
+    }
+
+    public BattleEntity(String name, int level, Animation animation, float maxHP, float maxMP, float maxTP, float atk, float def, float mAtk, float mDef, float speed) {
         super(animation);
 
         this.name = name;
+        this.level = level;
 
         this.maxHP = maxHP;
         curHP = maxHP;
@@ -125,10 +180,11 @@ public class BattleEntity extends Entity {
         init();
     }
 
-    public BattleEntity(String name, TextureRegion region, float maxHP, float maxMP, float maxTP, float atk, float def, float mAtk, float mDef, float speed) {
+    public BattleEntity(String name, int level, TextureRegion region, float maxHP, float maxMP, float maxTP, float atk, float def, float mAtk, float mDef, float speed) {
         super(region);
 
         this.name = name;
+        this.level = level;
 
         this.maxHP = maxHP;
         curHP = maxHP;
@@ -148,10 +204,11 @@ public class BattleEntity extends Entity {
         init();
     }
 
-    public BattleEntity(String name, Texture texture, float maxHP, float maxMP, float maxTP, float atk, float def, float mAtk, float mDef, float speed) {
+    public BattleEntity(String name, int level, Texture texture, float maxHP, float maxMP, float maxTP, float atk, float def, float mAtk, float mDef, float speed) {
         super(texture);
 
         this.name = name;
+        this.level = level;
 
         this.maxHP = maxHP;
         curHP = maxHP;
@@ -181,6 +238,10 @@ public class BattleEntity extends Entity {
         hpBar = new PercentageBar(Assets.SYSTEM_ATLAS.findRegion("HPBar"));
         mpBar = new PercentageBar(Assets.SYSTEM_ATLAS.findRegion("MPBar"));
         tpBar = new PercentageBar(Assets.SYSTEM_ATLAS.findRegion("TPBar"));
+
+        expReward = 50;
+
+        level = 1;
     }
 
     @Override
@@ -249,6 +310,63 @@ public class BattleEntity extends Entity {
             equipment.unequipEffect();
             equipments.remove(equipment);
         }
+    }
+
+    /**
+     * Creates a kaduki battler. 3x3 with set region width and height
+     *
+     * @param charsetName
+     * @param flipX
+     * @param flipY
+     * @param regionWidth
+     * @param regionHeight
+     */
+    public void createKadukiBattler(String charsetName, boolean flipX, boolean flipY, int regionWidth, int regionHeight) {
+        char_1 = split(new Texture("data/characters/"+charsetName+"_1.png"), regionWidth, regionHeight);
+        char_2 = split(new Texture("data/characters/"+charsetName+"_2.png"), regionWidth, regionHeight);
+        char_3 = split(new Texture("data/characters/"+charsetName+"_3.png"), regionWidth, regionHeight);
+
+        IDLE = AnimationUtils.createAnimationFromRegions(char_1, 0, 0.15f, Animation.PlayMode.LOOP_PINGPONG);
+        HURT = AnimationUtils.createAnimationFromRegions(char_1, 1, 0.10f, Animation.PlayMode.NORMAL);
+        DANGER = AnimationUtils.createAnimationFromRegions(char_1, 2, 0.15f, Animation.PlayMode.LOOP_PINGPONG);
+        WALKING = AnimationUtils.createAnimationFromRegions(char_1, 3, 0.15f, Animation.PlayMode.LOOP_PINGPONG);
+
+        VICTORY = AnimationUtils.createAnimationFromRegions(char_2, 0, 0.15f, Animation.PlayMode.NORMAL);
+        DODGE = AnimationUtils.createAnimationFromRegions(char_2, 1, 0.15f, Animation.PlayMode.NORMAL);
+        DEAD = AnimationUtils.createAnimationFromRegions(char_2, 3, 0.15f, Animation.PlayMode.NORMAL);
+
+        MELEE_ATTACK = AnimationUtils.createAnimationFromRegions(char_3, 0, 0.09f, Animation.PlayMode.LOOP_PINGPONG);
+        RANGED_ATTACK = AnimationUtils.createAnimationFromRegions(char_3, 1, 0.15f, Animation.PlayMode.NORMAL);
+        SPECIAL_ATTACK = AnimationUtils.createAnimationFromRegions(char_3, 2, 0.15f, Animation.PlayMode.LOOP_PINGPONG);
+        CAST = AnimationUtils.createAnimationFromRegions(char_3, 3, 0.15f, Animation.PlayMode.LOOP_PINGPONG);
+
+        DEFEND = AnimationUtils.createAnimationFromRegions(char_3, 0, 0, Animation.PlayMode.REVERSED);
+
+        animation = IDLE;
+        setSize(animation.getKeyFrame(0).getRegionWidth(), animation.getKeyFrame(0).getRegionHeight());
+
+        hpBar.setMaxWidth(getWidth());
+        mpBar.setMaxWidth(getWidth() / 2);
+        tpBar.setMaxWidth(getWidth() / 2);
+
+        flipBattler_void(flipX, flipY);
+    }
+
+    public Tween flipBattler(final boolean x, final boolean y) {
+        return Tween.call(new TweenCallback() {
+            @Override
+            public void onEvent(int type, BaseTween<?> source) {
+                AnimationUtils.flipTextureRegions(char_1, x, y);
+                AnimationUtils.flipTextureRegions(char_2, x, y);
+                AnimationUtils.flipTextureRegions(char_3, x, y);
+            }
+        });
+    }
+
+    public void flipBattler_void(boolean x, boolean y) {
+        AnimationUtils.flipTextureRegions(char_1, x, y);
+        AnimationUtils.flipTextureRegions(char_2, x, y);
+        AnimationUtils.flipTextureRegions(char_3, x, y);
     }
 
     /**
@@ -570,8 +688,32 @@ public class BattleEntity extends Entity {
         return DEFEND;
     }
 
+    public Map<Equipment.EQUIPMENT_TYPE, Equipment> getEquipments() {
+        return equipments;
+    }
+
+    public void setEquipments(Map<Equipment.EQUIPMENT_TYPE, Equipment> equipments) {
+        this.equipments = equipments;
+    }
+
+    public float getExpReward() {
+        return expReward;
+    }
+
+    public void setExpReward(float expReward) {
+        this.expReward = expReward;
+    }
+
     public Equipment getEquipment(Equipment.EQUIPMENT_TYPE type) {
         return equipments.get(type);
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
     }
 
     /**

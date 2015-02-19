@@ -1,19 +1,16 @@
 package com.levicore.silvermoon.entities.ui;
 
-import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.levicore.silvermoon.*;
+import com.levicore.silvermoon.Assets;
 import com.levicore.silvermoon.Character;
 import com.levicore.silvermoon.entities.Entity;
 import com.levicore.silvermoon.entities.TextEntity;
+import com.levicore.silvermoon.entities.battle.LevelableBattler;
 
 /**
  * Created by user on 2/10/2015.
  */
 public class CharacterInfo extends Entity {
-
-    private float textwidth;
 
     // TODO : FINISH
     private Character character;
@@ -27,7 +24,6 @@ public class CharacterInfo extends Entity {
 
         this.character = character;
         this.background = background;
-
 
         setSize(96, 96);
         setPosition(x, y);
@@ -49,7 +45,15 @@ public class CharacterInfo extends Entity {
             background.update(delta);
         }
 
+        if(character.getBattleEntity() instanceof LevelableBattler) {
+            LevelableBattler levelableBattler = (LevelableBattler) character.getBattleEntity();
+
+            expBar.setCurrentValue(levelableBattler.getCurExp());
+            expBar.setMaxValue(levelableBattler.getToNextLevel());
+        }
+
         expBar.setColor(getColor().r, getColor().g, getColor().b, getColor().a);
+
         expBar.update(delta);
 
         characterName.setColor(getColor());
@@ -63,4 +67,14 @@ public class CharacterInfo extends Entity {
         expBar.draw(batch);
         characterName.draw(batch);
     }
+
+    public PercentageBar getExpBar() {
+        return expBar;
+    }
+
+    public void setExpBar(PercentageBar expBar) {
+        this.expBar = expBar;
+    }
+
+
 }

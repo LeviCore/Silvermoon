@@ -12,6 +12,8 @@ import com.levicore.silvermoon.State;
 import com.levicore.silvermoon.core.Item;
 import com.levicore.silvermoon.entities.Entity;
 import com.levicore.silvermoon.entities.TextEntity;
+import com.levicore.silvermoon.entities.battle.BattleEntity;
+import com.levicore.silvermoon.entities.battle.LevelableBattler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,9 +26,9 @@ public class VictoryWindow {
     // TODO : FINISH THIS ASAP (Smoothen transitions, Exp gained tweening, connect to BattleState)
     private State battleState;
     private PHASE phase;
-
     private String text;
 
+    private List<Character> characters;
     private List<CharacterInfo> characterInfoList;
     private List<SimpleItemInfo> itemsGained;
 
@@ -45,8 +47,14 @@ public class VictoryWindow {
     public float insetY = 45;
     public float intervalX = 45;
 
-    public VictoryWindow(State battleState, List<Character> characters, List<Item> items) {
+    private float expGained;
+
+    public VictoryWindow(State battleState, List<Character> characters, List<Item> items, float expGained ) {
         this.battleState = battleState;
+        this.characters = characters;
+
+        this.expGained = expGained;
+
         phase = PHASE.UNSTARTED;
 
         width = Silvermoon.SCREEN_WIDTH - 50;
@@ -142,12 +150,12 @@ public class VictoryWindow {
         render(batch);
     }
 
-
     public Timeline next() {
         switch (phase) {
             case UNSTARTED :
                 return Timeline.createSequence()
                         .push(fadeInVictoryWindow(0.25f))
+                        .push(addExpGainedToBattlers(expGained, 0.25f))
                         .push(Tween.call(new TweenCallback() {
                             @Override
                             public void onEvent(int type, BaseTween<?> source) {
@@ -181,6 +189,18 @@ public class VictoryWindow {
     /**
      * Tweening and Animation Macros
      */
+    private Timeline addExpGainedToBattlers(float expToAdd, float duration) {
+        Timeline timeline = Timeline.createParallel();
+
+        for(Character character : characters) {
+            if(character.getBattleEntity() instanceof LevelableBattler) {
+                timeline.push(((LevelableBattler) character.getBattleEntity()).addExp(expToAdd, duration));
+            }
+        }
+
+        return timeline;
+    }
+
     private Timeline fadeInCharacterInfos(float duration) {
         Timeline timeline = Timeline.createParallel();
 

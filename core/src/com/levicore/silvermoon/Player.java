@@ -1,10 +1,8 @@
 package com.levicore.silvermoon;
 
-import com.levicore.silvermoon.core.Equipment;
 import com.levicore.silvermoon.inventory.ItemPage;
 import com.levicore.silvermoon.inventory.ItemStorage;
 import com.levicore.silvermoon.presets.characters.MainCharacters;
-import sun.applet.Main;
 
 import java.util.ArrayList;
 import java.util.List;

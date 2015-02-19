@@ -28,7 +28,7 @@ public class GSM {
     public void render(SpriteBatch batch, float delta) {
         for (int i = 0; i < states.size(); i++) {
             State state = states.get(i);
-                state.render(batch, delta);
+            state.render(batch, delta);
         }
     }
 

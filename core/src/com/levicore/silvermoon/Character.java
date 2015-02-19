@@ -11,11 +11,6 @@ public class Character {
 
     // TODO equipments
     // TODO LEVELS
-    private int level;
-    private float curExp = 0;
-    private float toNextLevel = 100;
-    private float expRate = 0.3f;
-
     private MapEntity mapEntity;
     private BattleEntity battleEntity;
     private Entity characterFace;
@@ -28,8 +23,6 @@ public class Character {
         this.characterFace = characterFace;
 
         this.name = name;
-
-        level = 1;
     }
 
     public Character(MapEntity mapEntity, BattleEntity battleEntity, Entity characterFace, int level, String name) {
@@ -38,27 +31,15 @@ public class Character {
         this.characterFace = characterFace;
 
         this.name = name;
-
-        this.level = level;
-    }
-
-    /**
-     * Level Control
-     */
-    public void addExp(float expToAdd) {
-        curExp += expToAdd;
-
-        if(curExp > toNextLevel) {
-            level++;
-
-            curExp = 0;
-            toNextLevel += toNextLevel * expRate;
-        }
     }
 
     /**
      * Getters and setters
      */
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public MapEntity getMapEntity() {
         return mapEntity;
     }

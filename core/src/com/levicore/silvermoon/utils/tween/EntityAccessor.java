@@ -3,8 +3,12 @@ package com.levicore.silvermoon.utils.tween;
 import aurelienribon.tweenengine.TweenAccessor;
 import com.levicore.silvermoon.entities.Entity;
 import com.levicore.silvermoon.entities.battle.BattleEntity;
+import com.levicore.silvermoon.entities.battle.LevelableBattler;
+import com.levicore.silvermoon.entities.ui.PercentageBar;
 
 public class EntityAccessor implements TweenAccessor<Entity> {
+
+    public static final int EXP = 7;
 
     public static final int HP = 6;
     public static final int MP = 5;
@@ -32,6 +36,7 @@ public class EntityAccessor implements TweenAccessor<Entity> {
                 returnValues[0] = target.getColor().a;
                 return 1;
 
+
             case HP :
                 returnValues[0] = ((BattleEntity) target).getCurHP();
                 return 1;
@@ -41,8 +46,9 @@ public class EntityAccessor implements TweenAccessor<Entity> {
             case TP :
                 returnValues[0] = ((BattleEntity) target).getCurTP();
                 return 1;
-
-
+            case EXP :
+                returnValues[0] = ((LevelableBattler) target).getCurExp();
+                return 1;
             default:
                 assert false;
                 return -1;
@@ -64,7 +70,6 @@ public class EntityAccessor implements TweenAccessor<Entity> {
             case ALPHA :
                 target.setColor(target.getColor().r, target.getColor().g, target.getColor().b, newValues[0]);
                 break;
-
             case HP :
                 ((BattleEntity) target).setCurHP(newValues[0]);
                 break;
@@ -74,7 +79,9 @@ public class EntityAccessor implements TweenAccessor<Entity> {
             case TP :
                 ((BattleEntity) target).setCurTP(newValues[0]);
                 break;
-
+            case EXP :
+                ((LevelableBattler) target).setCurExp(newValues[0]);
+                break;
             default :
                 assert false;
 		}

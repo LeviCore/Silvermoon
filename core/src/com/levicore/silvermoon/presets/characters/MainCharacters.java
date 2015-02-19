@@ -5,7 +5,7 @@ import com.levicore.silvermoon.Character;
 import com.levicore.silvermoon.core.Equipment;
 import com.levicore.silvermoon.entities.Entity;
 import com.levicore.silvermoon.entities.MapEntity;
-import com.levicore.silvermoon.entities.battle.KadukiBattler;
+import com.levicore.silvermoon.entities.battle.LevelableBattler;
 import com.levicore.silvermoon.presets.equipments.Sword;
 
 /**
@@ -14,7 +14,7 @@ import com.levicore.silvermoon.presets.equipments.Sword;
 public class MainCharacters {
 
     public static Character VINCE() throws Exception {
-        KadukiBattler battleEntity = new KadukiBattler("Vince", "$Actor63", 32, 32, 100, 15, 15, 10, 5, 3, 3, 5, true, false);
+        LevelableBattler battleEntity = new LevelableBattler("$Actor63", 5, true, false, 32, 32, "Vince", 100, 15, 15, 10, 5, 3, 3, 5, 1, 222, 0.15f);
         MapEntity mapEntity = new MapEntity("$Actor63", 32, 32, 100);
 
         battleEntity.getEquipmentsAvailable().add(Equipment.EQUIPMENT_TYPE.WEAPON_SLOT);
@@ -24,7 +24,7 @@ public class MainCharacters {
     }
 
     public static Character RHEAJOY() {
-        KadukiBattler battleEntity = new KadukiBattler("Rheajoy", "$Actor28", 32, 32, 60, 50, 15, 3, 3, 3, 3, 3, true, false);
+        LevelableBattler battleEntity = new LevelableBattler("$Actor28", 5, true, false, 32, 32, "Rheajoy", 60, 50, 15, 3, 3, 3, 3, 3, 1, 223, 0.15f);
         MapEntity mapEntity = new MapEntity("$Actor28", 32, 32, 100);
 
         return new Character(mapEntity, battleEntity, new Entity(Assets.FACES_ATLAS.findRegion("$Actor28_Normal")), "Rheajoy Luna");

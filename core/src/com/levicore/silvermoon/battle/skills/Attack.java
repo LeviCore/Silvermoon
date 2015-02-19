@@ -5,7 +5,6 @@ import com.levicore.silvermoon.Assets;
 import com.levicore.silvermoon.battle.Skill;
 import com.levicore.silvermoon.entities.Entity;
 import com.levicore.silvermoon.entities.battle.BattleEntity;
-import com.levicore.silvermoon.entities.battle.KadukiBattler;
 import com.levicore.silvermoon.presets.timelines.AnimationTimelines;
 import com.levicore.silvermoon.states.BattleState;
 
@@ -18,36 +17,30 @@ public class Attack extends Skill {
 
     @Override
     public Timeline execute(BattleState battleState, BattleEntity caster, List<BattleEntity> targets) {
-        if(caster.getClass() == KadukiBattler.class) {
-            KadukiBattler kadukiCaster = (KadukiBattler) caster;
+        float originalX = caster.getX();
+        float originalY = caster.getY();
 
-            float originalX = kadukiCaster.getX();
-            float originalY = kadukiCaster.getY();
+        int side = battleState.getSideFacing(caster);
 
-            int side = battleState.getSideFacing(caster);
+        Timeline timeline = Timeline.createSequence();
+        timeline.push(caster.setAnimation(caster.getWalkingPose()));
+        timeline.push(caster.moveTo(targets.get(0).getX() - (targets.get(0).getWidth() * side), targets.get(0).getY(), 1));
 
-            Timeline timeline = Timeline.createSequence();
-            timeline.push(kadukiCaster.setAnimation(kadukiCaster.getWalkingPose()));
-            timeline.push(kadukiCaster.moveTo(targets.get(0).getX() - (targets.get(0).getWidth() * side), targets.get(0).getY(), 1));
+        timeline.push(
+                Timeline.createParallel()
+                        .push(Timeline.createSequence()
+                                        .push(caster.setAnimation(caster.getMeleeAttackPose()))
+                                        .pushPause(0.09f * 3)
+                                        .push(battleState.setAttribute(BattleEntity.Attribute.HP, targets.get(0), -15))
+                        )
+                        .push(battleState.normalWeaponSwing(caster, null))
+        );
+        timeline.push(AnimationTimelines.SLASH(battleState, targets.get(0), targets.get(0).getX(), targets.get(0).getY()));
+        timeline.push(caster.setAnimation(caster.getWalkingPose()));
+        timeline.push(caster.moveTo(originalX, originalY, 1));
+        timeline.push(caster.setAnimation(caster.getIdlePose()));
 
-            timeline.push(
-                    Timeline.createParallel()
-                            .push(Timeline.createSequence()
-                                            .push(kadukiCaster.setAnimation(kadukiCaster.getMeleeAttackPose()))
-                                            .pushPause(0.09f * 3)
-                                            .push(battleState.setAttribute(BattleEntity.Attribute.HP, targets.get(0), -100))
-                            )
-                            .push(battleState.normalWeaponSwing(caster, null))
-            );
-            timeline.push(AnimationTimelines.SLASH(battleState, targets.get(0), targets.get(0).getX(), targets.get(0).getY()));
-            timeline.push(kadukiCaster.setAnimation(kadukiCaster.getWalkingPose()));
-            timeline.push(kadukiCaster.moveTo(originalX, originalY, 1));
-            timeline.push(kadukiCaster.setAnimation(kadukiCaster.getIdlePose()));
-
-            return timeline;
-        }
-
-        return null;
+        return timeline;
     }
 
     @Override

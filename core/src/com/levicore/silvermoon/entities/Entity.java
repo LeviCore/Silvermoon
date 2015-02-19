@@ -100,9 +100,11 @@ public class Entity extends Sprite {
         return Tween.call(new TweenCallback() {
             @Override
             public void onEvent(int type, BaseTween<?> source) {
-                stateTime = 0;
-                animation = newAnimation;
-                setSize(animation.getKeyFrame(0).getRegionWidth(), animation.getKeyFrame(0).getRegionHeight());
+                if(animation != null) {
+                    stateTime = 0;
+                    animation = newAnimation;
+                    setSize(animation.getKeyFrame(0).getRegionWidth(), animation.getKeyFrame(0).getRegionHeight());
+                }
             }
         });
     }

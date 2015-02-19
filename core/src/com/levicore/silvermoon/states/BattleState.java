@@ -5,7 +5,6 @@ import aurelienribon.tweenengine.Timeline;
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenCallback;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.levicore.silvermoon.*;
 import com.levicore.silvermoon.Character;
@@ -16,7 +15,6 @@ import com.levicore.silvermoon.core.Equipment;
 import com.levicore.silvermoon.core.Item;
 import com.levicore.silvermoon.entities.Entity;
 import com.levicore.silvermoon.entities.battle.BattleEntity;
-import com.levicore.silvermoon.entities.battle.KadukiBattler;
 import com.levicore.silvermoon.entities.ui.*;
 import com.levicore.silvermoon.utils.comparators.StatComparator;
 import com.levicore.silvermoon.utils.map.MapState;
@@ -113,6 +111,8 @@ public class BattleState extends State {
 
         float y = 0;
 
+
+
         for (int i1 = 0; i1 < characters.size(); i1++) {
             Character character = characters.get(i1);
 
@@ -121,7 +121,14 @@ public class BattleState extends State {
             }
         }
 
-        victoryWindow = new VictoryWindow(this, characters, itemDrops);
+        float totalExp = 0;
+
+        for (BattleEntity enemy : enemies) {
+            totalExp += enemy.getExpReward();
+        }
+
+
+        victoryWindow = new VictoryWindow(this, characters, itemDrops, totalExp);
 
         for (int i = 0; i < 4; i++) {
             if(i <= characters.size() - 1) {
@@ -345,7 +352,6 @@ public class BattleState extends State {
                         phase = PHASE.TURN_END;
                         execute();
                     } else {
-
                         executeBuffEffect().start(tweenManager);
 
                         fadeInHealthBars(1)
@@ -415,11 +421,15 @@ public class BattleState extends State {
 
             }
         } else {
-            victoryWindow.next().start(getTweenManager());
+            if(getWinner().equals(partyA)) {
+                victoryWindow.next().start(getTweenManager());
 
-            if(done) {
-                executeWin();
-                done = false;
+                if (done) {
+                    executeWin();
+                    done = false;
+                }
+            } else {
+                // TODO PUT GAMEOVER SCREEN HERE
             }
         }
     }
@@ -656,7 +666,7 @@ public class BattleState extends State {
                         }
 
                         tweenManager.killTarget(target, EntityAccessor.HP);
-                        timeline_1.push(target.setHP(finalValue, 0.25f));
+                        timeline_1.push(target.setHP(finalValue, 1));
 
                         if (finalValue < 1) {
                             target.setAnimation(target.getDeadPose()).start(tweenManager);
@@ -803,13 +813,16 @@ public class BattleState extends State {
     public void drawBattlerNames(SpriteBatch batch) {
         if(phase == PHASE.ACTION_SELECTION || phase == PHASE.TARGET_SELECTION) {
             for (BattleEntity battleEntity : battlers) {
-                float textWidth = battleEntity.getBitmapFont() == null ? gsm.getBitmapFont().getWrappedBounds(battleEntity.getName(), 200).width : battleEntity.getBitmapFont().getWrappedBounds(battleEntity.getName(), 200).width;
-                float textHeight = battleEntity.getBitmapFont() == null ? gsm.getBitmapFont().getWrappedBounds(battleEntity.getName(), 200).height : battleEntity.getBitmapFont().getWrappedBounds(battleEntity.getName(), 200).height;
+
+                String text = "Lvl. " + battleEntity.getLevel() + " " + battleEntity.getName();
+
+                float textWidth = battleEntity.getBitmapFont() == null ? gsm.getBitmapFont().getWrappedBounds(text, 200).width : battleEntity.getBitmapFont().getWrappedBounds(text, 200).width;
+                float textHeight = battleEntity.getBitmapFont() == null ? gsm.getBitmapFont().getWrappedBounds(text, 200).height : battleEntity.getBitmapFont().getWrappedBounds(text, 200).height;
 
                 if (battleEntity.getBitmapFont() != null) {
-                    battleEntity.getBitmapFont().drawWrapped(batch, battleEntity.getName(), battleEntity.getX() + (battleEntity.getWidth() / 2) - (textWidth / 2), battleEntity.getY() + battleEntity.getHeight() + textHeight, 200);
+                    battleEntity.getBitmapFont().drawWrapped(batch, text, battleEntity.getX() + (battleEntity.getWidth() / 2) - (textWidth / 2), battleEntity.getY() + battleEntity.getHeight() + textHeight, 200);
                 } else {
-                    gsm.getBitmapFont().drawWrapped(batch, battleEntity.getName(), battleEntity.getX() + (battleEntity.getWidth() / 2) - (textWidth / 2), battleEntity.getY() + battleEntity.getHeight() + textHeight, 200);
+                    gsm.getBitmapFont().drawWrapped(batch, text, battleEntity.getX() + (battleEntity.getWidth() / 2) - (textWidth / 2), battleEntity.getY() + battleEntity.getHeight() + textHeight, 200);
                 }
             }
         }

@@ -42,7 +42,7 @@ public class StateTest extends State {
         itemsGained.add(new Item(new Entity(Assets.FACES_ATLAS.findRegion("$Actor63_Normal")), "axqwee", ""));
 
 
-        victoryWindow = new VictoryWindow(this, characters, itemsGained);
+        victoryWindow = new VictoryWindow(this, characters, itemsGained, 1);
     }
 
     @Override

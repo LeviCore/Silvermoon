@@ -58,7 +58,7 @@ public class PercentageBar extends Entity {
     @Override
     public void update(float delta) {
         super.update(delta);
-        setSize(maxWidth * (currentValue / maxValue), getHeight());
+        setSize(maxWidth * (currentValue / maxValue) > maxWidth ? maxWidth : maxWidth * (currentValue / maxValue), getHeight());
     }
 
     @Override
@@ -66,6 +66,14 @@ public class PercentageBar extends Entity {
         if(currentValue > 0 && visible) {
             super.draw(batch);
         }
+    }
+
+    public float getMaxValue() {
+        return maxValue;
+    }
+
+    public float getCurrentValue() {
+        return currentValue;
     }
 
     public void init() {
