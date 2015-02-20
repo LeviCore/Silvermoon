@@ -205,11 +205,103 @@ public class MapEntity extends Entity {
         UP, DOWN, LEFT, RIGHT
     }
 
+
+    /**
+     * Getters and setters
+     */
     public void setCallback(OptionCallback callback) {
         this.callback = callback;
     }
 
     public OptionCallback getCallback() {
         return callback;
+    }
+
+    public float getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(float speed) {
+        this.speed = speed;
+    }
+
+    public void setVelocity(Vector2 velocity) {
+        this.velocity = velocity;
+    }
+
+    public void setForwardX(float forwardX) {
+        this.forwardX = forwardX;
+    }
+
+    public void setForwardY(float forwardY) {
+        this.forwardY = forwardY;
+    }
+
+    public void setCollisionRectangle(Rectangle collisionRectangle) {
+        this.collisionRectangle = collisionRectangle;
+    }
+
+    public float getOldX() {
+        return oldX;
+    }
+
+    public void setOldX(float oldX) {
+        this.oldX = oldX;
+    }
+
+    public float getOldY() {
+        return oldY;
+    }
+
+    public void setOldY(float oldY) {
+        this.oldY = oldY;
+    }
+
+    public Animation getIdle() {
+        return idle;
+    }
+
+    public void setIdle(Animation idle) {
+        this.idle = idle;
+    }
+
+    public Animation getUp() {
+        return up;
+    }
+
+    public void setUp(Animation up) {
+        this.up = up;
+    }
+
+    public Animation getDown() {
+        return down;
+    }
+
+    public void setDown(Animation down) {
+        this.down = down;
+    }
+
+    public Animation getLeft() {
+        return left;
+    }
+
+    public void setLeft(Animation left) {
+        this.left = left;
+    }
+
+    public Animation getRight() {
+        return right;
+    }
+
+    public void setRight(Animation right) {
+        this.right = right;
+    }
+
+    public DIRECTION getDirection() {
+        return direction;
+    }
+
+    public void setDirection(DIRECTION direction) {
+        this.direction = direction;
     }
 }

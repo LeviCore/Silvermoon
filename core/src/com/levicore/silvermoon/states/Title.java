@@ -7,8 +7,7 @@ import aurelienribon.tweenengine.TweenCallback;
 import com.levicore.silvermoon.*;
 import com.levicore.silvermoon.entities.Entity;
 import com.levicore.silvermoon.entities.ui.OneSelectionMenu;
-import com.levicore.silvermoon.states.chapter1.BasicRPGMap;
-import com.levicore.silvermoon.utils.map.MapState;
+import com.levicore.silvermoon.states.chapter1.TestMap;
 import com.levicore.silvermoon.utils.menu.OptionCallback;
 
 import java.util.ArrayList;
@@ -78,7 +77,7 @@ public class Title extends State {
                         .push(Tween.call(new TweenCallback() {
                             @Override
                             public void onEvent(int type, BaseTween<?> source) {
-                                gsm.setPeek(new BasicRPGMap(gsm));
+                                gsm.setPeek(new TestMap(gsm));
                             }
                         }))
                 .start(tweenManager);

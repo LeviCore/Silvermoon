@@ -36,9 +36,11 @@ public class Attack extends Skill {
                         .push(battleState.normalWeaponSwing(caster, null))
         );
         timeline.push(AnimationTimelines.SLASH(battleState, targets.get(0), targets.get(0).getX(), targets.get(0).getY()));
+
         timeline.push(caster.setAnimation(caster.getWalkingPose()));
         timeline.push(caster.moveTo(originalX, originalY, 1));
         timeline.push(caster.setAnimation(caster.getIdlePose()));
+
 
         return timeline;
     }

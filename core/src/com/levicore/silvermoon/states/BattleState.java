@@ -111,8 +111,6 @@ public class BattleState extends State {
 
         float y = 0;
 
-
-
         for (int i1 = 0; i1 < characters.size(); i1++) {
             Character character = characters.get(i1);
 
@@ -238,6 +236,7 @@ public class BattleState extends State {
         partyA = new ArrayList<>();
         battlers = new ArrayList<>();
         circularMenu = new CircularMenu();
+
         db = new DialogBox(Assets.SYSTEM_ATLAS.findRegion("Skill_Info_Background"));
         skillInfoBar = new SkillInfoBar();
 
@@ -586,14 +585,15 @@ public class BattleState extends State {
      * Circularmenu controls
      */
     public void initSkillsOnCircularMenu() {
-        int i = 2;
-        for(SkillOption skillOption : circularMenu.options) {
-            if(i >= battlers.get(active).getSkills().size()) {
-                break;
-            }
 
-            skillOption.setSkill(battlers.get(active).getSkills().get(i));
-            i++;
+        if(getActiveBattler().getSkills().size() > 1) {
+            SkillOption[] option = circularMenu.options;
+            for (int i = 2; i < option.length; i++) {
+                if (i <= getActiveBattler().getSkills().size() - 1) {
+                    SkillOption skillOption = option[i];
+                    skillOption.setSkill(getActiveBattler().getSkills().get(i));
+                }
+            }
         }
     }
 
@@ -610,6 +610,8 @@ public class BattleState extends State {
         for(SkillOption skillOption : circularMenu.options) {
             skillOption.setSkill(null);
         }
+
+        isSkillMenuOpen = false;
     }
 
     private void transitionInSkillOptions() {
@@ -951,6 +953,18 @@ public class BattleState extends State {
         }
 
         return super.touchDragged(screenX, screenY, pointer);
+    }
+
+
+    /**
+     * Getters and setters
+     */
+    public DialogBox getDb() {
+        return db;
+    }
+
+    public List<Character> getCharacters() {
+        return characters;
     }
 
     /**

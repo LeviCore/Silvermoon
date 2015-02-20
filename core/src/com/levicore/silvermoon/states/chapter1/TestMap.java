@@ -12,22 +12,22 @@ import com.levicore.silvermoon.utils.menu.OptionCallback;
 /**
 * Created by Leonard on 12/30/2014.
 */
-public class BasicRPGMap extends MapState {
+public class TestMap extends MapState {
 
     /** Test */
-    public BasicRPGMap(final GSM gsm) {
+    public TestMap(final GSM gsm) {
         super(gsm, "Introduction", gsm.getGame().player.getParty().get(0).getMapEntity(), new int[]{ 0, 1 }, new int[]{ 2 }, new int[] { 3, 4 });
 
         final MapEntity x = new MapEntity("$Actor63", 32, 32, 300);
-        final BasicRPGMap basicRPGMap = this;
+        final TestMap testMap = this;
 
         x.setPosition(50, 300);
         x.setCallback(new OptionCallback() {
             @Override
             public void execute() {
                 fadeOutAll(1).start(tweenManager);
-                gsm.getGame().getInputMultiplexer().removeProcessor(basicRPGMap);
-                gsm.push(new BattleState(gsm, basicRPGMap, Assets.getMusic("battle"), BattleState.PHASE.TURN_START, gsm.getGame().player.getParty(), Enemies_1.createDummies()));
+                gsm.getGame().getInputMultiplexer().removeProcessor(testMap);
+                gsm.push(new BattleState(gsm, testMap, Assets.getMusic("battle"), BattleState.PHASE.TURN_START, gsm.getGame().player.getParty(), Enemies_1.createDummies()));
             }
         });
 

@@ -3,12 +3,14 @@ package com.levicore.silvermoon;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonValue;
+import com.levicore.silvermoon.presets.characters.MainCharacters;
 import com.levicore.silvermoon.states.Title;
-import com.levicore.silvermoon.utils.debug.DebugState;
-import test.StateTest;
 
 public class Silvermoon extends ApplicationAdapter {
 
@@ -53,15 +55,15 @@ public class Silvermoon extends ApplicationAdapter {
 			if(selfSwitch) {
 				Assets.initResources();
 
-                try {
-                    player = new Player(this);
-                } catch (Exception e) {
-                    e.printStackTrace();
+                if(!Loader.PREFS.contains("save")) {
+                    player = new Player();
+                    Loader.savePlayer(player);
+                } else {
+                    player = Loader.loadPlayer();
                 }
 
+
                 gsm.push(new Title(gsm));
-//                gsm.push(new StateTest(gsm));
-//                gsm.push(new DebugState(gsm));
 
 				selfSwitch = false;
 			}
@@ -75,7 +77,7 @@ public class Silvermoon extends ApplicationAdapter {
         }
 	}
 
-	@Override
+    @Override
 	public void resize(int width, int height) {
 		gsm.resizeStates();
 	}
@@ -83,6 +85,7 @@ public class Silvermoon extends ApplicationAdapter {
 	@Override
 	public void dispose() {
 		Assets.dispose();
+        Loader.savePlayer(player);
 	}
 
 	/**

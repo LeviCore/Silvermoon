@@ -15,7 +15,8 @@ public class Character {
     private BattleEntity battleEntity;
     private Entity characterFace;
 
-    public String name;
+    private String name;
+    private int presetChar;
 
     public Character(MapEntity mapEntity, BattleEntity battleEntity, Entity characterFace, String name) {
         this.mapEntity = mapEntity;
@@ -66,5 +67,13 @@ public class Character {
 
     public String getName() {
         return name;
+    }
+
+    public int getPresetChar() {
+        return presetChar;
+    }
+
+    public void setPresetChar(int presetChar) {
+        this.presetChar = presetChar;
     }
 }

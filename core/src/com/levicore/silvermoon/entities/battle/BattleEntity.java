@@ -290,7 +290,7 @@ public class BattleEntity extends Entity {
     /**
      * Equipment control
      */
-    public void equip(Equipment equipment) throws Exception {
+    public void equip(Equipment equipment) {
         if(equipmentsAvailable.contains(equipment.getEquipment_type())) {
             if(!equipments.containsKey(equipment.getEquipment_type())) {
 
@@ -298,10 +298,10 @@ public class BattleEntity extends Entity {
                 equipment.equipEffect();
 
             } else {
-                throw new Exception("an Equipment is already Equiped.");
+                System.out.print("an Equipment is already Equiped.");
             }
         } else {
-           throw new Exception("Equipment is not available for this character, add it");
+           System.out.print("Equipment is not available for this character, add it");
         }
     }
 
@@ -468,7 +468,7 @@ public class BattleEntity extends Entity {
         this.def = def;
     }
 
-    public float getmAtk() {
+    public float getMAtk() {
         return mAtk;
     }
 
@@ -476,7 +476,7 @@ public class BattleEntity extends Entity {
         this.mAtk = mAtk;
     }
 
-    public float getmDef() {
+    public float getMDef() {
         return mDef;
     }
 

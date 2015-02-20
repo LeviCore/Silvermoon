@@ -88,7 +88,6 @@ public class LevelableBattler extends BattleEntity {
         return curExp;
     }
 
-    @Deprecated
     public void setCurExp(float curExp) {
         this.curExp = curExp;
     }
